@@ -1,10 +1,8 @@
-import { DuckStatePreview } from "@/components/DuckStatePreview";
+import type { Metadata } from "next";
+import { DuckPanel } from "@/components/DuckPanel";
+
+export const metadata: Metadata = { title: "Hardware duck · Quack Overflow" };
 
 export default function DuckPage() {
-  return (
-    <div className="mx-auto w-full max-w-3xl p-6">
-      <h1 className="mb-6 text-2xl font-bold">Duck</h1>
-      <DuckStatePreview />
-    </div>
-  );
+  return <DuckPanel />;
 }
