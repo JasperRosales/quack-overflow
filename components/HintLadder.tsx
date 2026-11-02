@@ -67,7 +67,7 @@ export function HintLadder({ level, disabled, onClimb }: HintLadderProps) {
                   />
                 </span>
                 <span className="flex items-baseline gap-1.5 px-0.5">
-                  <span className="font-mono text-[11px] text-muted-foreground">{s.level}</span>
+                  <span className="text-muted-foreground tabular-nums">{s.level}</span>
                   <span className={cn("font-medium", active && "text-foreground", used && "text-foreground")}>{s.label}</span>
                 </span>
                 <span className="sr-only">

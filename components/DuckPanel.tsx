@@ -41,7 +41,7 @@ export function DuckPanel() {
   return (
     <div className="mx-auto w-full max-w-5xl space-y-6 px-4 py-8 sm:px-6 sm:py-12">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Hardware duck</h1>
+        <h1 className="display text-4xl">Hardware duck</h1>
         <p className="text-sm text-muted-foreground">
           Optional: an ESP32 rubber duck with LEDs and a speaker that mirrors Quack&apos;s mood. Plug it in over USB and connect. Everything
           works without it. See <code className="rounded bg-muted px-1">hardware/wiring.md</code> for parts and wiring.

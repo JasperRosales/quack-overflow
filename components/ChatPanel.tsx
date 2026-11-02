@@ -73,7 +73,7 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
               <div
                 className={cn(
                   "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed break-words whitespace-pre-wrap sm:max-w-[80%]",
-                  m.role === "user" ? "rounded-br-md bg-primary text-primary-foreground" : "well rounded-bl-md text-foreground"
+                  m.role === "user" ? "rounded-br-md bg-primary text-primary-foreground" : "duck-voice rounded-bl-md border bg-card text-[15.5px] text-foreground"
                 )}
               >
                 <span className="sr-only">{m.role === "user" ? "You said: " : "Quack said: "}</span>

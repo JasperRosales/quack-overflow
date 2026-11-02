@@ -56,13 +56,13 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
             base: "vs",
             inherit: true,
             rules: [],
-            colors: { "editor.background": "#ffffff", "editorGutter.background": "#ffffff", "editor.lineHighlightBackground": "#f4f4f5", "editorLineNumber.foreground": "#a1a1aa", "editorLineNumber.activeForeground": "#18181b" },
+            colors: { "editor.background": "#ffffff", "editorGutter.background": "#ffffff", "editor.lineHighlightBackground": "#f3f6f6", "editorLineNumber.foreground": "#9db0b2", "editorLineNumber.activeForeground": "#13292d", "editorIndentGuide.background1": "#e3eaea" },
           });
           monaco.editor.defineTheme("quack-dark", {
             base: "vs-dark",
             inherit: true,
             rules: [],
-            colors: { "editor.background": "#111113", "editorGutter.background": "#111113", "editor.lineHighlightBackground": "#18181b", "editorLineNumber.foreground": "#52525b", "editorLineNumber.activeForeground": "#e4e4e7" },
+            colors: { "editor.background": "#12252a", "editorGutter.background": "#12252a", "editor.lineHighlightBackground": "#163036", "editorLineNumber.foreground": "#4d6a6f", "editorLineNumber.activeForeground": "#e4eded", "editorIndentGuide.background1": "#1d363c" },
           });
         }}
         onChange={(v) => onChange(v ?? "")}
@@ -74,8 +74,9 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
         }}
         options={{
           fontSize: 13.5,
-          fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
+          fontFamily: "var(--font-jetbrains), ui-monospace, monospace",
           renderLineHighlight: "line",
+          fontLigatures: false,
           overviewRulerBorder: false,
           hideCursorInOverviewRuler: true,
           scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
