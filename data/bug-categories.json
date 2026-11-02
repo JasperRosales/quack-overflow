@@ -1,0 +1,16 @@
+[
+  { "id": "off-by-one", "label": "Off-by-one" },
+  { "id": "typo-name-error", "label": "Typo / name error" },
+  { "id": "wrong-type", "label": "Wrong type" },
+  { "id": "wrong-operator", "label": "Wrong operator / comparison" },
+  { "id": "logic-order", "label": "Logic order" },
+  { "id": "infinite-loop", "label": "Infinite loop" },
+  { "id": "scope-shadowing", "label": "Scope / variable shadowing" },
+  { "id": "mutation-aliasing", "label": "Mutation / aliasing" },
+  { "id": "async-await", "label": "Async / await" },
+  { "id": "null-undefined", "label": "Null / undefined" },
+  { "id": "indentation", "label": "Indentation" },
+  { "id": "missing-return", "label": "Missing return" },
+  { "id": "wrong-data-structure", "label": "Wrong data structure" },
+  { "id": "other", "label": "Other" }
+]
