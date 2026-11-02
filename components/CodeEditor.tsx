@@ -44,12 +44,27 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
   useEffect(applyHighlights, [highlightLines.join(",")]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="h-full min-h-[280px] w-full" data-testid="code-editor" data-highlight-lines={highlightLines.join(",")}>
+    <div className="h-full min-h-[280px] w-full overflow-hidden rounded-xl" data-testid="code-editor" data-highlight-lines={highlightLines.join(",")}>
       <Editor
         height={height}
         language={language}
         value={value}
-        theme={dark ? "vs-dark" : "light"}
+        theme={dark ? "quack-dark" : "quack-light"}
+        beforeMount={(monaco) => {
+          // Match the neumorphic page surface so the editor reads as an inset well.
+          monaco.editor.defineTheme("quack-light", {
+            base: "vs",
+            inherit: true,
+            rules: [],
+            colors: { "editor.background": "#ebe8e1", "editorGutter.background": "#ebe8e1", "editor.lineHighlightBackground": "#00000008" },
+          });
+          monaco.editor.defineTheme("quack-dark", {
+            base: "vs-dark",
+            inherit: true,
+            rules: [],
+            colors: { "editor.background": "#25272c", "editorGutter.background": "#25272c", "editor.lineHighlightBackground": "#ffffff08" },
+          });
+        }}
         onChange={(v) => onChange(v ?? "")}
         loading={<div className="p-4 text-sm text-muted-foreground">Loading editor…</div>}
         onMount={(editor, monaco) => {
@@ -59,6 +74,8 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
         }}
         options={{
           fontSize: 14,
+          lineNumbersMinChars: 3,
+          padding: { top: 10, bottom: 10 },
           minimap: { enabled: false },
           glyphMargin: true,
           scrollBeyondLastLine: false,

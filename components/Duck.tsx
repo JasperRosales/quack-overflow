@@ -58,9 +58,9 @@ export function Duck({ state, size = 200, className }: DuckProps) {
       role="img"
       aria-label={LABELS[state]}
       data-duck-state={state}
-      style={{ width: size, height: size }}
+      style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}
     >
-      <svg viewBox="0 0 200 200" width={size} height={size} aria-hidden="true">
+      <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
         {/* water ripple */}
         <ellipse cx="100" cy="182" rx="70" ry="8" className="fill-sky-300/40 dark:fill-sky-500/25" />
 

@@ -48,12 +48,12 @@ export function DuckPanel() {
         </p>
       </div>
 
-      <section aria-labelledby="conn-title" className="rounded-xl border bg-card p-4">
+      <section aria-labelledby="conn-title" className="neu rounded-3xl p-4 sm:p-5">
         <h2 id="conn-title" className="mb-3 font-semibold">
           Connection
         </h2>
         {!link.supported ? (
-          <p role="status" className="rounded-lg bg-muted p-3 text-sm">
+          <p role="status" className="neu-inset-sm rounded-2xl p-3 text-sm">
             Web Serial isn&apos;t available in this browser. Use desktop <strong>Chrome</strong> or <strong>Edge</strong> to connect a hardware duck.
             The on-screen duck works everywhere.
           </p>
@@ -85,11 +85,11 @@ export function DuckPanel() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section aria-labelledby="test-title" className="rounded-xl border bg-card p-4">
+        <section aria-labelledby="test-title" className="neu rounded-3xl p-4 sm:p-5">
           <h2 id="test-title" className="mb-3 font-semibold">
             Test commands
           </h2>
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <ul className="grid gap-3 sm:grid-cols-2">
             {DUCK_COMMANDS.map((c) => (
               <li key={c}>
                 <Button
@@ -106,7 +106,7 @@ export function DuckPanel() {
             ))}
           </ul>
           <h3 className="mt-5 mb-2 text-sm font-semibold">Serial log</h3>
-          <ol className="h-40 overflow-y-auto rounded-lg bg-zinc-950 p-2 font-mono text-xs text-zinc-100" aria-label="Serial log" aria-live="polite">
+          <ol className="h-40 overflow-y-auto rounded-2xl bg-zinc-950 p-2 font-mono text-xs text-zinc-100" aria-label="Serial log" aria-live="polite">
             {log.length === 0 && <li className="text-zinc-400">Nothing yet. Press the duck&apos;s button to see BTN_HINT.</li>}
             {log.map((l, i) => (
               <li key={i}>
@@ -116,8 +116,8 @@ export function DuckPanel() {
           </ol>
         </section>
 
-        <section aria-labelledby="preview-title" className="rounded-xl border bg-card p-4">
-          <div className="mb-3 flex items-center justify-between">
+        <section aria-labelledby="preview-title" className="neu rounded-3xl p-4 sm:p-5">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h2 id="preview-title" className="font-semibold">
               On-screen duck states
             </h2>

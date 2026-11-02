@@ -37,9 +37,9 @@ Quack Overflow is a web app with an animated duck, **Quack**, plus an optional p
 ```mermaid
 flowchart LR
   UI["Debug page<br/>Monaco · chat · hint ladder"] -- "code + chat + hint level" --> API["/api/duck"]
-  API --> LLM["Claude Sonnet 5.5<br/>structured JSON reply"]
+  API --> LLM["Gemini 3.6 Flash<br/>structured JSON reply"]
   LLM --> G1["Leak guard 1:<br/>deterministic checks"]
-  G1 --> G2["Leak guard 2:<br/>LLM judge (Haiku 5.5)"]
+  G1 --> G2["Leak guard 2:<br/>LLM judge (Gemini Flash-Lite)"]
   G2 -- "leak → regenerate once,<br/>then safe fallback" --> LLM
   G2 -- "safe reply" --> UI
   UI --> STATE["Duck mood → Duck.tsx"]
@@ -56,7 +56,7 @@ flowchart LR
    - **Near-copy detection:** a Smith–Waterman token alignment between every reply line and every code line flags "edited copies" of real lines, e.g. `range(len(nums))` vs your `range(1, len(nums))`, even without backticks.
    - Known fixes for the sample programs.
    - Red-flag phrases ("change X to Y", "replace … with …") escalate to the judge.
-2. **LLM judge:** a fast Claude Haiku 5.5 call returns `{leak, reason}`. It fails closed.
+2. **LLM judge:** a fast Gemini 3.5 Flash-Lite call returns `{leak, reason}`. It fails closed.
 3. **Regenerate once** with the reason; if it still leaks, fall back to a safe generic question.
 4. Guard catches are counted (server log + "Answer leaks blocked" in the journal).
 
@@ -68,7 +68,7 @@ The duck API streams progress (`thinking → checking → rewriting`) as NDJSON,
 
 - Node.js **20+** (developed on Node 24) and npm
 - Chrome or Edge for voice and the hardware duck (everything else works in any modern browser)
-- An [Anthropic API key](https://console.anthropic.com/) for real AI replies (optional: demo mode needs none)
+- A [Gemini API key](https://aistudio.google.com/apikey) for real AI replies (optional: demo mode needs none)
 
 ### Run it
 
@@ -83,15 +83,15 @@ npm run dev                    # http://localhost:3000
 `.env.local`:
 
 ```bash
-ANTHROPIC_API_KEY=sk-ant-...      # your key
-ANTHROPIC_MODEL=claude-sonnet-5-5 # duck model
+GEMINI_API_KEY=...                # your key
+GEMINI_MODEL=gemini-3.6-flash     # duck model
 MOCK_AI=false                     # true = scripted replies, no API calls
-# Optional: ANTHROPIC_GUARD_MODEL / ANTHROPIC_CLASSIFY_MODEL (default claude-haiku-5-5)
+# Optional: GEMINI_GUARD_MODEL / GEMINI_CLASSIFY_MODEL (default gemini-3.5-flash-lite)
 ```
 
 ### Demo mode (no API key)
 
-Set `MOCK_AI=true`, or leave `ANTHROPIC_API_KEY` empty: the app falls back to mock mode automatically and shows a "demo mode" badge. All six samples have scripted conversations. Samples 1 (Python average) and 4 (JS `<=` loop) have the full arc: questions → hints → line highlight → solved. Mock replies still pass through the deterministic leak guard.
+Set `MOCK_AI=true`, or leave `GEMINI_API_KEY` empty: the app falls back to mock mode automatically and shows a "demo mode" badge. All six samples have scripted conversations. Samples 1 (Python average) and 4 (JS `<=` loop) have the full arc: questions → hints → line highlight → solved. Mock replies still pass through the deterministic leak guard.
 
 ### Scripts
 
@@ -115,7 +115,7 @@ Full parts list, pin table and wiring diagram: **[hardware/wiring.md](hardware/w
 
 ## Tech stack
 
-Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 · shadcn/ui (Base UI) · Monaco Editor · Framer Motion · Recharts · Anthropic SDK (Claude Sonnet 5.5 + Haiku 5.5, structured outputs) · zod · Pyodide · Web Workers · Web Speech API · Web Serial API · ESP32 / Arduino · Vitest · Playwright · Vercel
+Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 · shadcn/ui (Base UI) · Monaco Editor · Framer Motion · Recharts · Google Gen AI SDK (Gemini 3.6 Flash + 3.5 Flash-Lite, structured JSON output) · zod · Pyodide · Web Workers · Web Speech API · Web Serial API · ESP32 / Arduino · Vitest · Playwright · Vercel (auto-deploys from `main`)
 
 ## Testing status
 

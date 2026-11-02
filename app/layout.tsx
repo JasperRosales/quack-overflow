@@ -1,12 +1,22 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { DuckLinkProvider } from "@/components/DuckLink";
 import { THEME_SCRIPT } from "@/components/ThemeToggle";
+import { MotionProvider } from "@/components/Motion";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ebe8e1" },
+    { media: "(prefers-color-scheme: dark)", color: "#25272c" },
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Quack Overflow — the rubber duck that won't give you the answer",
@@ -27,12 +37,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <DuckLinkProvider>
-          <Nav />
-          <main id="main" className="flex flex-1 flex-col">
-            {children}
-          </main>
-        </DuckLinkProvider>
+        <MotionProvider>
+          <DuckLinkProvider>
+            <Nav />
+            <main id="main" className="flex flex-1 flex-col">
+              {children}
+            </main>
+          </DuckLinkProvider>
+        </MotionProvider>
       </body>
     </html>
   );

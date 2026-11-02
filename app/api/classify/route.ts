@@ -1,5 +1,5 @@
 import { ClassifyRequestSchema } from "@/lib/apiSchemas";
-import { classifySession, isMock } from "@/lib/anthropic";
+import { classifySession, isMock } from "@/lib/gemini";
 import { mockClassify } from "@/lib/mockDuck";
 
 /** POST a solved session → { category, lessonLearned }. */

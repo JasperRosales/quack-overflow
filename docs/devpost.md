@@ -22,7 +22,7 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
 ## How we built it
 
 - **Next.js 16 + TypeScript + Tailwind + shadcn/ui.** UI and API routes in one app.
-- **Claude Sonnet 5.5** plays Quack, with a persona prompt and **structured JSON output** (`reply`, `highlight_lines`, `solved_signal`, `duck_mood`) validated with zod. **Claude Haiku 5.5** acts as the fast leak judge and as the bug classifier.
+- **Gemini 3.6 Flash** plays Quack, with a persona prompt and **structured JSON output** (`reply`, `highlight_lines`, `solved_signal`, `duck_mood`) validated with zod. **Gemini 3.5 Flash-Lite** acts as the fast leak judge and as the bug classifier.
 - **Monaco Editor** with line decorations for hint level 3.
 - **Pyodide** in a module Web Worker and a JS Web Worker with console capture, Node-style value formatting (`Promise { <pending> }`), stdin, and a 5-second kill switch.
 - **Framer Motion** SVG duck with six moods (idle, listening, thinking, curious, celebrating, sleepy), all respecting reduced motion.
@@ -66,4 +66,4 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
 
 ## Built with
 
-`nextjs` `react` `typescript` `tailwindcss` `shadcn-ui` `anthropic` `claude` `monaco-editor` `pyodide` `web-workers` `framer-motion` `recharts` `zod` `web-speech-api` `web-serial-api` `esp32` `arduino` `c++` `vitest` `playwright` `vercel`
+`nextjs` `react` `typescript` `tailwindcss` `shadcn-ui` `gemini` `google-genai` `monaco-editor` `pyodide` `web-workers` `framer-motion` `recharts` `zod` `web-speech-api` `web-serial-api` `esp32` `arduino` `c++` `vitest` `playwright` `vercel`

@@ -1,5 +1,5 @@
 import { DuckRequestSchema } from "@/lib/apiSchemas";
-import { RefusalError, generateDuckReply, isMock, judgeLeak } from "@/lib/anthropic";
+import { RefusalError, generateDuckReply, isMock, judgeLeak } from "@/lib/gemini";
 import { guardedReply } from "@/lib/guardPipeline";
 import { pickFallback } from "@/lib/leakGuard";
 import { mockDuckReply, scriptFor } from "@/lib/mockDuck";

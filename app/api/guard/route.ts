@@ -1,5 +1,5 @@
 import { GuardRequestSchema } from "@/lib/apiSchemas";
-import { isMock, judgeLeak } from "@/lib/anthropic";
+import { isMock, judgeLeak } from "@/lib/gemini";
 import { deterministicCheck } from "@/lib/leakGuard";
 import { guardStats } from "@/lib/guardPipeline";
 import { findSampleByCode } from "@/data/samples";

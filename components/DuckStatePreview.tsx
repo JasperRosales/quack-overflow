@@ -19,7 +19,7 @@ export function DuckStatePreview({ onChange }: { onChange?: (s: DuckState) => vo
       <p className="text-sm text-muted-foreground" aria-live="polite">
         State: <strong className="text-foreground">{state}</strong>
       </p>
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="flex flex-wrap justify-center gap-3">
         <Button onClick={() => pick((i + 1) % DUCK_STATES.length)} data-testid="cycle-duck">
           Cycle state ↻
         </Button>

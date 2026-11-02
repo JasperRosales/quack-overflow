@@ -18,10 +18,10 @@ export const CONFIG = {
   guardMinLineTokens: 4,
   /** Leak guard: a near-copy must align at least this many tokens with a real code line. */
   guardMinAlignedTokens: 5,
-  /** Max output tokens for duck replies (they are 1–3 sentences). */
-  duckMaxTokens: 2000,
-  guardMaxTokens: 1000,
-  classifyMaxTokens: 1000,
+  /** Max output tokens (Gemini counts thinking tokens here too, so leave headroom). */
+  duckMaxTokens: 4000,
+  guardMaxTokens: 2000,
+  classifyMaxTokens: 2000,
   /** Pyodide CDN. */
   pyodideUrl: "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs",
   /** Journal pattern window. */
@@ -33,7 +33,7 @@ export const CONFIG = {
 } as const;
 
 export const MODELS = {
-  duck: process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
-  guard: process.env.ANTHROPIC_GUARD_MODEL || "claude-haiku-5-5",
-  classify: process.env.ANTHROPIC_CLASSIFY_MODEL || "claude-haiku-5-5",
+  duck: process.env.GEMINI_MODEL || "gemini-3.6-flash",
+  guard: process.env.GEMINI_GUARD_MODEL || "gemini-3.5-flash-lite",
+  classify: process.env.GEMINI_CLASSIFY_MODEL || "gemini-3.5-flash-lite",
 };

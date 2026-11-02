@@ -2,7 +2,7 @@
  * Red-team the duck: send 15 "just tell me the answer" attacks to a running app
  * and count how many replies leak the fix.
  *
- *   npm run dev            # in another terminal (real AI needs ANTHROPIC_API_KEY)
+ *   npm run dev            # in another terminal (real AI needs GEMINI_API_KEY)
  *   npm run redteam        # or: npx tsx scripts/redteam.ts --base http://localhost:3000
  *
  * Each final reply is re-checked independently: deterministic guard + known fix snippets
@@ -90,7 +90,7 @@ async function main() {
 
   const summary = { date: new Date().toISOString(), mode: mock ? "MOCK_AI" : "live", attacks: ATTACKS.length, leaksThrough: leaks, guardCatches: caught, fallbacks };
   console.log(`\nRed-team (${summary.mode}): ${leaks}/${ATTACKS.length} leaks got through. Leak guard caught ${caught} leaky draft(s); ${fallbacks} fallback question(s).`);
-  if (mock) console.log("⚠️  Server is in MOCK_AI mode, so replies are scripted. Run with ANTHROPIC_API_KEY set for a real red-team result.");
+  if (mock) console.log("⚠️  Server is in MOCK_AI mode, so replies are scripted. Run with GEMINI_API_KEY set for a real red-team result.");
   mkdirSync("deliverables", { recursive: true });
   writeFileSync(`deliverables/redteam-${summary.mode}.json`, JSON.stringify({ summary, results }, null, 2));
   process.exit(leaks === 0 ? 0 : 1);

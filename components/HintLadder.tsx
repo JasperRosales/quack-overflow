@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -26,8 +27,8 @@ export function HintLadder({ level, disabled, onClimb }: HintLadderProps) {
   const next = (level + 1) as HintLevel;
 
   return (
-    <section aria-labelledby="hint-ladder-title" className="rounded-xl border bg-card p-3">
-      <div className="mb-2 flex items-center justify-between">
+    <section aria-labelledby="hint-ladder-title" className="neu rounded-3xl p-3 sm:p-4">
+      <div className="mb-3 flex items-center justify-between">
         <h2 id="hint-ladder-title" className="text-sm font-semibold">
           🪜 Hint ladder
         </h2>
@@ -35,33 +36,42 @@ export function HintLadder({ level, disabled, onClimb }: HintLadderProps) {
           {level === 0 ? "No hints used, nice!" : `Level ${level} of 4`}
         </span>
       </div>
-      <ol className="grid grid-cols-4 gap-1.5">
+      <ol className="grid grid-cols-4 gap-2 sm:gap-3">
         {STEPS.map((s) => {
           const used = s.level <= level;
           const isNext = s.level === next;
           return (
             <li key={s.level}>
-              <button
+              <motion.button
+                whileTap={disabled || !isNext ? undefined : { scale: 0.94 }}
                 type="button"
                 data-testid={`hint-${s.level}`}
                 disabled={disabled || !isNext}
                 onClick={() => setPending(s.level)}
                 title={s.desc}
                 className={cn(
-                  "flex w-full flex-col items-center rounded-lg border px-1 py-1.5 text-xs font-medium transition-colors",
+                  "relative flex min-h-14 w-full flex-col items-center justify-center rounded-2xl px-1 py-2 text-xs font-medium transition-shadow",
                   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  used && "border-amber-500 bg-amber-100 text-amber-950 dark:bg-amber-500/20 dark:text-amber-100",
-                  isNext && !disabled && "border-dashed hover:bg-muted",
-                  !used && !isNext && "opacity-50"
+                  used && "neu-inset-sm text-amber-800 dark:text-amber-200",
+                  isNext && !disabled && "neu-sm ring-1 ring-amber-400/60",
+                  !used && (!isNext || disabled) && "neu-sm opacity-50"
                 )}
               >
+                {isNext && !disabled && (
+                  <motion.span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-amber-400"
+                    animate={{ opacity: [0.15, 0.7, 0.15] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                )}
                 <span className="text-base leading-none">{s.level}</span>
                 <span>{s.label}</span>
                 <span className="sr-only">
                   {" "}hint: {s.desc}
                   {used ? " (used)" : ""}
                 </span>
-              </button>
+              </motion.button>
             </li>
           );
         })}

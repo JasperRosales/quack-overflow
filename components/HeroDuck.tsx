@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { DuckState } from "@/lib/types";
 import { Duck } from "./Duck";
@@ -24,9 +24,18 @@ export function HeroDuck() {
   const c = CYCLE[i];
   return (
     <div className="flex flex-col items-center">
-      <div className="relative mb-2 max-w-xs rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-950 shadow-sm dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-50">
-        {c.bubble}
-        <span className="absolute -bottom-2 left-1/2 size-4 -translate-x-1/2 rotate-45 border-r border-b border-amber-300 bg-amber-50 dark:border-amber-500/40 dark:bg-[#2a2111]" aria-hidden />
+      <div className="neu-inset-sm relative mb-3 flex min-h-[3.75rem] w-full max-w-xs items-center justify-center rounded-2xl px-4 py-2 text-center text-sm text-amber-950 dark:text-amber-50">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2 }}
+          >
+            {c.bubble}
+          </motion.span>
+        </AnimatePresence>
       </div>
       <Duck state={c.state} size={260} />
     </div>

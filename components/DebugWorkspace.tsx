@@ -1,7 +1,8 @@
 "use client";
 
 import confetti from "canvas-confetti";
-import { BookOpen, Loader2, Play, RotateCcw, Usb } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { BookOpen, Code2, Loader2, MessageCircle, Play, RotateCcw, Usb } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -22,6 +23,7 @@ import { HintLadder } from "./HintLadder";
 import { Button, buttonVariants } from "./ui/button";
 import { Switch } from "./ui/switch";
 import { RichText } from "./RichText";
+import { cn } from "@/lib/utils";
 
 const STARTERS: Record<Language, string> = {
   python: "# Paste your Python code here\n",
@@ -79,6 +81,8 @@ export function DebugWorkspace() {
   const [duckSpeaks, setDuckSpeaks] = useState(false);
   const [isMockMode, setIsMockMode] = useState<boolean | null>(null);
   const [solvedInfo, setSolvedInfo] = useState<{ category?: string; lesson?: string } | null>(null);
+  /** Phones/tablets show one panel at a time; desktop (lg+) shows both side by side. */
+  const [mobileTab, setMobileTab] = useState<"code" | "duck">("code");
 
   const sessionRef = useRef<DebugSession | null>(null);
   const busyRef = useRef(false);
@@ -225,6 +229,7 @@ export function DebugWorkspace() {
   const send = (text: string) => {
     const s = sessionRef.current;
     if (!s) return;
+    setMobileTab("duck");
     const m = msg("user", text);
     const messages = [...s.messages, m];
     update((cur) => ({ ...cur, messages }));
@@ -235,6 +240,7 @@ export function DebugWorkspace() {
     const s = sessionRef.current;
     if (!s || running) return;
     setRunning(true);
+    setMobileTab("duck");
     setError(null);
     setMood("thinking");
     duckLink.send("THINK");
@@ -341,10 +347,37 @@ export function DebugWorkspace() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl flex-1 gap-4 p-4 lg:h-[calc(100dvh-3.5rem)] lg:min-h-0 lg:flex-none lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+    <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-[minmax(0,1fr)] content-start gap-5 p-3 sm:p-4 lg:content-stretch lg:h-[calc(100dvh-3.5rem)] lg:min-h-0 lg:flex-none lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <h1 className="sr-only">Debug with Quack</h1>
+      {/* ---------------- mobile panel switcher ---------------- */}
+      <div role="tablist" aria-label="Workspace panel" className="neu-inset-sm grid grid-cols-2 gap-1 rounded-2xl p-1 lg:hidden">
+        {(
+          [
+            ["code", "Code", Code2],
+            ["duck", "Quack", MessageCircle],
+          ] as const
+        ).map(([id, label, Icon]) => (
+          <button
+            key={id}
+            role="tab"
+            type="button"
+            aria-selected={mobileTab === id}
+            onClick={() => setMobileTab(id)}
+            className="relative flex h-10 items-center justify-center gap-2 rounded-xl text-sm font-medium focus-visible:outline-2 focus-visible:outline-ring"
+          >
+            {mobileTab === id && <motion.span layoutId="ws-tab" className="neu-sm absolute inset-0 rounded-xl" aria-hidden />}
+            <span className="relative z-10 flex items-center gap-2">
+              <Icon className="size-4" aria-hidden /> {label}
+              {id === "code" && highlightLines.length > 0 && (
+                <span className="size-2 rounded-full bg-amber-500" aria-label="(line highlighted)" />
+              )}
+              {id === "duck" && busy && <Loader2 className="size-3.5 animate-spin" aria-label="(Quack is thinking)" />}
+            </span>
+          </button>
+        ))}
+      </div>
       {/* ---------------- left: code ---------------- */}
-      <section aria-label="Your code" className="flex min-h-0 flex-col gap-3">
+      <section aria-label="Your code" className={cn("min-h-0 flex-col gap-4 lg:flex", mobileTab === "code" ? "flex" : "hidden")}>
         <div className="flex flex-wrap items-center gap-2">
           <label className="sr-only" htmlFor="sample-select">
             Load a sample bug
@@ -354,7 +387,7 @@ export function DebugWorkspace() {
             data-testid="sample-select"
             value={session.sampleId ?? ""}
             onChange={(e) => reset(e.target.value || undefined)}
-            className="h-9 min-w-0 flex-1 rounded-lg border bg-background px-2 text-sm"
+            className="neu-inset-sm h-10 min-w-0 flex-1 basis-full rounded-xl px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring sm:basis-0"
           >
             <option value="">✏️ My own code</option>
             {SAMPLES.map((s, i) => (
@@ -375,18 +408,18 @@ export function DebugWorkspace() {
               else update((cur) => ({ ...cur, language }));
               if (language === "python") void prewarmPython().catch(() => {});
             }}
-            className="h-9 rounded-lg border bg-background px-2 text-sm"
+            className="neu-inset-sm h-10 flex-1 rounded-xl px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring sm:flex-none"
           >
             <option value="python">Python</option>
             <option value="javascript">JavaScript</option>
           </select>
-          <Button onClick={run} disabled={running} data-testid="run-button" className="h-9 px-4">
+          <Button onClick={run} disabled={running} data-testid="run-button" className="h-10 flex-1 px-5 sm:flex-none">
             {running ? <Loader2 className="animate-spin" aria-hidden /> : <Play aria-hidden />}
             {running ? (runStatus ?? "Running…") : "Run"}
           </Button>
         </div>
 
-        <div className="min-h-[320px] flex-1 overflow-hidden rounded-xl border lg:min-h-0">
+        <div className="neu-inset min-h-[50dvh] flex-1 overflow-hidden rounded-2xl p-1.5 lg:min-h-0">
           <CodeEditor
             value={session.code}
             language={session.language}
@@ -395,7 +428,7 @@ export function DebugWorkspace() {
           />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-[1fr_200px]">
+        <div className="grid gap-4 sm:grid-cols-[1fr_200px]">
           <div>
             <label htmlFor="expected" className="mb-1 block text-sm font-medium">
               What should this code do?
@@ -407,7 +440,7 @@ export function DebugWorkspace() {
               value={session.expectedBehavior}
               onChange={(e) => update((cur) => ({ ...cur, expectedBehavior: e.target.value }))}
               placeholder="e.g. Print the average of the scores (75.0)"
-              className="w-full resize-none rounded-lg border bg-background px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-ring"
+              className="neu-inset-sm w-full resize-none rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-ring"
             />
           </div>
           <div>
@@ -420,16 +453,18 @@ export function DebugWorkspace() {
               value={stdin}
               onChange={(e) => setStdin(e.target.value)}
               placeholder="One line per input() / prompt()"
-              className="w-full resize-none rounded-lg border bg-background px-3 py-2 font-mono text-sm focus-visible:outline-2 focus-visible:outline-ring"
+              className="neu-inset-sm w-full resize-none rounded-xl px-3 py-2 font-mono text-sm focus-visible:outline-2 focus-visible:outline-ring"
             />
           </div>
         </div>
       </section>
 
       {/* ---------------- right: duck + chat ---------------- */}
-      <section aria-label="Quack the duck" className="flex min-h-[600px] flex-col gap-3 lg:min-h-0">
-        <div className="flex items-center gap-3 rounded-xl border bg-card p-3">
-          <Duck state={duckState} size={96} />
+      <section aria-label="Quack the duck" className={cn("min-h-[calc(100dvh-9rem)] flex-col gap-4 lg:flex lg:min-h-0", mobileTab === "duck" ? "flex" : "hidden")}>
+        <div className="neu flex items-center gap-3 rounded-3xl p-3">
+          <div className="neu-inset-sm shrink-0 rounded-2xl p-1">
+            <Duck state={duckState} size={88} />
+          </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold">Quack</p>
             <p className="truncate text-sm text-muted-foreground" aria-live="polite" data-testid="duck-caption">
@@ -459,7 +494,7 @@ export function DebugWorkspace() {
                 </button>
               )}
               {isMockMode && (
-                <span className="rounded bg-muted px-1.5 py-0.5 text-muted-foreground" title="MOCK_AI mode: scripted replies, no API calls">
+                <span className="neu-inset-sm rounded-full px-2 py-0.5 text-muted-foreground" title="MOCK_AI mode: scripted replies, no API calls">
                   demo mode
                 </span>
               )}
@@ -469,12 +504,21 @@ export function DebugWorkspace() {
 
         <HintLadder level={session.maxHintUsed} disabled={busy || session.solved} onClimb={climb} />
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border bg-card">
+        <div className="neu flex min-h-[60dvh] flex-1 flex-col overflow-hidden rounded-3xl lg:min-h-0">
+          <AnimatePresence initial={false}>
           {solvedInfo && (
-            <div className="border-b bg-green-50 p-3 text-sm text-green-950 dark:bg-green-500/10 dark:text-green-100" role="status" data-testid="solved-banner">
+            <motion.div
+              key="solved"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="m-3 mb-0 overflow-hidden rounded-2xl bg-green-50 p-3 text-sm text-green-950 shadow-[var(--neu-in-sm)] dark:bg-green-500/10 dark:text-green-100"
+              role="status"
+              data-testid="solved-banner"
+            >
               <p className="font-semibold">🎉 Bug squashed!{solvedInfo.category ? ` Category: ${categoryLabel(solvedInfo.category)}` : ""}</p>
               {solvedInfo.lesson ? <p className="mt-1"><RichText text={solvedInfo.lesson} /></p> : <p className="mt-1 opacity-80">Writing it in your bug journal…</p>}
-              <div className="mt-2 flex gap-2">
+              <div className="mt-3 flex flex-wrap gap-3">
                 <Button size="sm" variant="outline" onClick={() => reset()}>
                   <RotateCcw aria-hidden /> New session
                 </Button>
@@ -482,8 +526,9 @@ export function DebugWorkspace() {
                   <BookOpen aria-hidden /> View journal
                 </Link>
               </div>
-            </div>
+            </motion.div>
           )}
+          </AnimatePresence>
           <ChatPanel
             messages={session.messages}
             busy={busy}
@@ -492,16 +537,24 @@ export function DebugWorkspace() {
             onTyping={setTyping}
             disabled={session.solved}
           />
-          {error && (
-            <p role="alert" className="border-t bg-red-50 px-3 py-2 text-sm text-red-900 dark:bg-red-500/10 dark:text-red-200">
-              {error}{" "}
-              <button className="underline" onClick={() => setError(null)}>
-                Dismiss
-              </button>
-            </p>
-          )}
+          <AnimatePresence>
+            {error && (
+              <motion.p
+                role="alert"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                className="mx-3 mb-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-900 dark:bg-red-500/10 dark:text-red-200"
+              >
+                {error}{" "}
+                <button className="underline" onClick={() => setError(null)}>
+                  Dismiss
+                </button>
+              </motion.p>
+            )}
+          </AnimatePresence>
           {!session.solved && (
-            <div className="flex items-center justify-between gap-2 border-t px-3 py-2 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between gap-2 px-4 pt-1 pb-3 text-xs text-muted-foreground">
               <span>Found it on your own?</span>
               <Button size="sm" variant="secondary" onClick={() => void markSolved()} data-testid="mark-solved">
                 ✅ Mark as solved

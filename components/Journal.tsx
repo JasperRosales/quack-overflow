@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -11,6 +12,7 @@ import { buildDemoJournal, computeStats } from "@/lib/journalStats";
 import { RichText } from "./RichText";
 import { Button, buttonVariants } from "./ui/button";
 import { Duck } from "./Duck";
+import { fadeUp, stagger } from "./Motion";
 
 // Single-series bar colour, validated (light + dark surfaces) with the dataviz palette validator.
 const BAR = "#D97706";
@@ -32,13 +34,22 @@ function snapshot(): DebugSession[] {
   return cache.sessions;
 }
 
+const NARROW_QUERY = "(max-width: 639px)";
+function subscribeNarrow(cb: () => void) {
+  const mq = window.matchMedia(NARROW_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+const useNarrow = () =>
+  useSyncExternalStore(subscribeNarrow, () => window.matchMedia(NARROW_QUERY).matches, () => false);
+
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-xl border bg-card p-4">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="mt-1 text-3xl font-bold tabular-nums">{value}</p>
+    <motion.div variants={fadeUp} whileHover={{ y: -3 }} className="neu rounded-3xl p-4 sm:p-5">
+      <p className="text-xs text-muted-foreground sm:text-sm">{label}</p>
+      <p className="mt-1 text-2xl font-bold tabular-nums sm:text-3xl">{value}</p>
       {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
-    </div>
+    </motion.div>
   );
 }
 
@@ -48,6 +59,7 @@ export function Journal() {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [guardCatches, setGuardCatches] = useState(0);
   const [showTable, setShowTable] = useState(false);
+  const narrow = useNarrow();
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- read localStorage after hydration
     setNow(new Date());
@@ -62,13 +74,13 @@ export function Journal() {
 
   if (solved.length === 0) {
     return (
-      <div className="mx-auto flex max-w-lg flex-col items-center gap-4 p-10 text-center">
+      <div className="mx-auto flex max-w-lg flex-col items-center gap-5 px-5 py-10 text-center">
         <Duck state="sleepy" size={160} />
         <h1 className="text-2xl font-bold">Your bug journal is empty</h1>
         <p className="text-muted-foreground">
           Every bug you squash with Quack lands here, with its category and the lesson you learned. Patterns show up after a few bugs.
         </p>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-4">
           <Link href="/debug?sample=js-off-by-one" className={buttonVariants()}>
             Try a sample bug
           </Link>
@@ -83,7 +95,7 @@ export function Journal() {
   const chartData = stats.byCategory.map((c) => ({ ...c, label: categoryLabel(c.category) }));
 
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-6 p-4 sm:p-6">
+    <motion.div variants={stagger} initial="hidden" animate="show" className="mx-auto w-full max-w-5xl space-y-6 p-4 sm:p-6">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h1 className="text-2xl font-bold">Bug journal</h1>
@@ -101,10 +113,11 @@ export function Journal() {
       </div>
 
       {stats.pattern && (
-        <div
+        <motion.div
+          variants={fadeUp}
           role="status"
           data-testid="pattern-callout"
-          className="flex items-center gap-3 rounded-xl border border-amber-400 bg-amber-50 p-4 text-amber-950 dark:border-amber-500/50 dark:bg-amber-500/10 dark:text-amber-50"
+          className="neu-inset flex items-center gap-3 rounded-3xl border-l-4 border-amber-400 p-4 text-amber-950 dark:text-amber-50"
         >
           <span className="text-3xl" aria-hidden>
             👀
@@ -114,22 +127,22 @@ export function Journal() {
             {stats.pattern.count === 1 ? "error" : "errors"} this week.{" "}
             {stats.pattern.count >= 2 ? "Quack suggests double-checking that next time!" : "Keep an eye on it!"}
           </p>
-        </div>
+        </motion.div>
       )}
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4" data-testid="journal-stats">
+      <motion.div variants={stagger} className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4" data-testid="journal-stats">
         <StatCard label="Bugs solved" value={String(stats.solved)} />
         <StatCard label="Avg. questions to solve" value={stats.avgQuestions.toFixed(1)} hint="Duck questions per bug" />
         <StatCard label="Hints used" value={String(stats.hintsUsed)} hint={`${stats.noHintSolves} solved with no hints`} />
         <StatCard label="Answer leaks blocked" value={String(guardCatches)} hint="Times the leak guard stopped a spoiler" />
-      </div>
+      </motion.div>
 
-      <section aria-labelledby="cat-title" className="rounded-xl border bg-card p-4">
+      <motion.section variants={fadeUp} aria-labelledby="cat-title" className="neu rounded-3xl p-4 sm:p-5">
         <div className="mb-2 flex items-center justify-between">
           <h2 id="cat-title" className="font-semibold">
             Bugs by category
           </h2>
-          <button className="text-sm underline-offset-2 hover:underline" onClick={() => setShowTable((v) => !v)} aria-expanded={showTable}>
+          <button className="neu-press rounded-full px-3 py-1 text-xs sm:text-sm" onClick={() => setShowTable((v) => !v)} aria-expanded={showTable}>
             {showTable ? "Show chart" : "Show as table"}
           </button>
         </div>
@@ -153,13 +166,13 @@ export function Journal() {
         ) : (
           <div style={{ height: Math.max(140, chartData.length * 40 + 30) }} role="img" aria-label={`Bar chart: ${chartData.map((d) => `${d.label} ${d.count}`).join(", ")}`}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 32, bottom: 4, left: 8 }} barCategoryGap={8}>
+              <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 28, bottom: 4, left: narrow ? 0 : 8 }} barCategoryGap={8}>
                 <CartesianGrid horizontal={false} stroke="currentColor" strokeOpacity={0.1} />
                 <XAxis type="number" allowDecimals={false} tick={{ fill: "currentColor", fontSize: 12 }} stroke="currentColor" strokeOpacity={0.2} />
-                <YAxis type="category" dataKey="label" width={170} tick={{ fill: "currentColor", fontSize: 12 }} stroke="currentColor" strokeOpacity={0.2} />
+                <YAxis type="category" dataKey="label" width={narrow ? 104 : 170} tick={{ fill: "currentColor", fontSize: narrow ? 11 : 12 }} stroke="currentColor" strokeOpacity={0.2} />
                 <Tooltip
                   cursor={{ fill: "currentColor", fillOpacity: 0.06 }}
-                  contentStyle={{ background: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{ background: "var(--popover)", color: "var(--popover-foreground)", border: "none", boxShadow: "var(--neu-out-sm)", borderRadius: 12, fontSize: 12 }}
                   formatter={(v) => [`${v} bug${v === 1 ? "" : "s"}`, "Solved"]}
                 />
                 <Bar dataKey="count" fill={BAR} isAnimationActive={!reduceMotion} radius={[0, 4, 4, 0]} maxBarSize={24}>
@@ -169,16 +182,16 @@ export function Journal() {
             </ResponsiveContainer>
           </div>
         )}
-      </section>
+      </motion.section>
 
-      <section aria-labelledby="lessons-title" className="rounded-xl border bg-card p-4">
+      <motion.section variants={fadeUp} aria-labelledby="lessons-title" className="neu rounded-3xl p-4 sm:p-5">
         <h2 id="lessons-title" className="mb-3 font-semibold">
           Lessons learned
         </h2>
         <ol className="relative space-y-4 border-l pl-5" data-testid="lessons">
           {solved.map((s) => (
             <li key={s.id} className="relative">
-              <span className="absolute -left-[27px] top-1 size-3 rounded-full border-2 border-background" style={{ background: BAR }} aria-hidden />
+              <span className="absolute -left-[27px] top-1 size-3 rounded-full border-2 border-background shadow-[var(--neu-out-sm)]" style={{ background: BAR }} aria-hidden />
               <p className="text-xs text-muted-foreground">
                 <time dateTime={s.solvedAt}>{s.solvedAt ? new Date(s.solvedAt).toLocaleString() : ""}</time> · {categoryLabel(s.category)} ·{" "}
                 {s.maxHintUsed === 0 ? "no hints 💪" : `hint level ${s.maxHintUsed}`}
@@ -192,10 +205,10 @@ export function Journal() {
             </li>
           ))}
         </ol>
-      </section>
+      </motion.section>
       <p className="text-xs text-muted-foreground">
         Patterns look at the last {CONFIG.patternWindowDays} days. Categories: {BUG_CATEGORIES.length} types, classified by AI (may be imperfect).
       </p>
-    </div>
+    </motion.div>
   );
 }

@@ -54,10 +54,10 @@ export function VoiceButton({ onText, onListeningChange, disabled }: VoiceButton
       aria-label={listening ? "Stop listening" : "Talk to the duck"}
       title={error ?? (listening ? "Listening… click to stop" : "Talk to the duck")}
       className={cn(
-        "inline-flex size-10 shrink-0 items-center justify-center rounded-lg border transition-colors",
+        "neu-press inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-background",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50",
-        listening ? "animate-pulse border-red-500 bg-red-500 text-white" : "hover:bg-muted",
-        error && "border-red-500"
+        listening && "animate-pulse bg-red-500 text-white",
+        error && "text-red-600"
       )}
     >
       {listening ? <MicOff className="size-5" aria-hidden /> : <Mic className="size-5" aria-hidden />}
