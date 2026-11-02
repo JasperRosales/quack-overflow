@@ -34,7 +34,7 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
           isWholeLine: true,
           className: "qo-highlight-line",
           glyphMarginClassName: "qo-highlight-glyph",
-          hoverMessage: { value: "🦆 Quack says: look closely at this line" },
+          hoverMessage: { value: "Quack says: look closely at this line" },
         },
       }))
     );
@@ -44,7 +44,7 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
   useEffect(applyHighlights, [highlightLines.join(",")]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="h-full min-h-[280px] w-full overflow-hidden rounded-xl" data-testid="code-editor" data-highlight-lines={highlightLines.join(",")}>
+    <div className="h-full min-h-[280px] w-full" data-testid="code-editor" data-highlight-lines={highlightLines.join(",")}>
       <Editor
         height={height}
         language={language}
@@ -56,13 +56,13 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
             base: "vs",
             inherit: true,
             rules: [],
-            colors: { "editor.background": "#ebe8e1", "editorGutter.background": "#ebe8e1", "editor.lineHighlightBackground": "#00000008" },
+            colors: { "editor.background": "#ffffff", "editorGutter.background": "#ffffff", "editor.lineHighlightBackground": "#f4f4f5", "editorLineNumber.foreground": "#a1a1aa", "editorLineNumber.activeForeground": "#18181b" },
           });
           monaco.editor.defineTheme("quack-dark", {
             base: "vs-dark",
             inherit: true,
             rules: [],
-            colors: { "editor.background": "#25272c", "editorGutter.background": "#25272c", "editor.lineHighlightBackground": "#ffffff08" },
+            colors: { "editor.background": "#111113", "editorGutter.background": "#111113", "editor.lineHighlightBackground": "#18181b", "editorLineNumber.foreground": "#52525b", "editorLineNumber.activeForeground": "#e4e4e7" },
           });
         }}
         onChange={(v) => onChange(v ?? "")}
@@ -73,7 +73,12 @@ export function CodeEditor({ value, language, onChange, highlightLines = [], hei
           applyHighlights();
         }}
         options={{
-          fontSize: 14,
+          fontSize: 13.5,
+          fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
+          renderLineHighlight: "line",
+          overviewRulerBorder: false,
+          hideCursorInOverviewRuler: true,
+          scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
           lineNumbersMinChars: 3,
           padding: { top: 10, bottom: 10 },
           minimap: { enabled: false },

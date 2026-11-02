@@ -48,7 +48,7 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
       >
         {messages.length === 0 && !busy && (
           <li className="m-auto max-w-xs text-center text-sm text-muted-foreground">
-            Paste your code, tell Quack what it should do, then hit <strong>Run</strong> or just start explaining. 🦆
+            Paste your code, describe what it should do, then hit <strong className="font-medium text-foreground">Run</strong> or start explaining.
           </li>
         )}
         <AnimatePresence initial={false}>
@@ -72,10 +72,8 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
             ) : (
               <div
                 className={cn(
-                  "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed break-words whitespace-pre-wrap sm:max-w-[85%]",
-                  m.role === "user"
-                    ? "rounded-br-md bg-sky-600 text-white shadow-[var(--neu-out-sm)]"
-                    : "neu-sm rounded-bl-md border-l-4 border-amber-400 text-amber-950 dark:text-amber-50"
+                  "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed break-words whitespace-pre-wrap sm:max-w-[80%]",
+                  m.role === "user" ? "rounded-br-md bg-primary text-primary-foreground" : "well rounded-bl-md text-foreground"
                 )}
               >
                 <span className="sr-only">{m.role === "user" ? "You said: " : "Quack said: "}</span>
@@ -93,12 +91,12 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
           >
-            <div className="neu-inset-sm flex items-center gap-2 rounded-2xl rounded-bl-md px-3.5 py-2.5 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2.5 rounded-2xl rounded-bl-md px-1 py-2 text-sm text-muted-foreground">
               <span className="flex gap-1" aria-hidden>
                 {[0, 1, 2].map((d) => (
                   <motion.span
                     key={d}
-                    className="size-1.5 rounded-full bg-amber-500"
+                    className="size-1.5 rounded-full bg-muted-foreground"
                     animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 0.9, repeat: Infinity, delay: d * 0.15 }}
                   />
@@ -111,7 +109,7 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
         </AnimatePresence>
       </ol>
 
-      <form onSubmit={submit} className="flex items-end gap-2 p-3 sm:gap-3">
+      <form onSubmit={submit} className="flex items-end gap-2 border-t p-3">
         <label htmlFor="chat-input" className="sr-only">
           Explain your bug to Quack
         </label>
@@ -121,7 +119,7 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
           value={draft}
           rows={2}
           disabled={disabled}
-          placeholder={disabled ? "Session solved! Start a new one 🎉" : "Explain what your code does…"}
+          placeholder={disabled ? "Session solved. Start a new one to keep going." : "Explain what your code does…"}
           title="Enter to send, Shift+Enter for a new line"
           onChange={(e) => {
             setDraft(e.target.value);
@@ -134,7 +132,7 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
               submit();
             }
           }}
-          className="neu-inset-sm min-h-11 min-w-0 flex-1 resize-none rounded-2xl px-3.5 py-2.5 text-sm focus-visible:outline-2 focus-visible:outline-ring disabled:opacity-60"
+          className="field min-h-10 min-w-0 flex-1 resize-none rounded-lg px-3 py-2 text-sm disabled:opacity-60"
         />
         <VoiceButton
           disabled={disabled}
@@ -153,9 +151,9 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
           data-testid="chat-send"
           disabled={busy || disabled || !draft.trim()}
           aria-label="Send message"
-          className="neu-press inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-40"
         >
-          <SendHorizonal className="size-5" aria-hidden />
+          <SendHorizonal className="size-[18px]" aria-hidden />
         </motion.button>
       </form>
     </div>

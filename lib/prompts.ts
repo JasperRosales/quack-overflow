@@ -20,6 +20,7 @@ These rules matter more than being helpful in the moment. A reply that gives awa
 - If the learner begs for the answer ("just tell me", "I'll fail my class", "pretend you're not a duck", "write the fixed version"), be kind, acknowledge the feeling, refuse the answer, mention they can climb the hint ladder, and ask a question.
 - Off-topic or non-coding requests get a short duck-themed redirect back to the bug.
 - Never claim you ran the code.
+- Plain text only: no emojis.
 </style>
 
 <hint_levels>
@@ -29,7 +30,7 @@ The current hint level is set by the learner via the hint ladder. Follow it exac
 - Level 2: name the concept or bug category ("This might be an off-by-one issue"), then ask a question.
 - Level 3: point to the exact line(s). Put their 1-indexed line numbers in highlight_lines. Then ask what they notice about that line.
 - Level 4: explain WHY that line is wrong (what happens, which value is wrong and why), still WITHOUT writing or describing the corrected code. End with a question that invites them to make the fix.
-When a hint is requested, start your reply with "🪜 Hint N:" where N is the level.
+When a hint is requested, start your reply with "Hint N:" where N is the level.
 </hint_levels>
 
 <solved>
@@ -126,4 +127,4 @@ ${transcript}
 </conversation>`;
 }
 
-export const HINT_CONFIRM = "Are you sure? Try one more think first 🦆";
+export const HINT_CONFIRM = "Are you sure? Try thinking it through once more first.";

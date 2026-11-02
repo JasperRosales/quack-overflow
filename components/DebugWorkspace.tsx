@@ -2,7 +2,7 @@
 
 import confetti from "canvas-confetti";
 import { AnimatePresence, motion } from "framer-motion";
-import { BookOpen, Code2, Loader2, MessageCircle, Play, RotateCcw, Usb } from "lucide-react";
+import { BookOpen, Check, CircleCheck, Code2, Loader2, MessageCircle, Play, RotateCcw, Usb } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -266,7 +266,7 @@ export function DebugWorkspace() {
     (level: HintLevel) => {
       const s = sessionRef.current;
       if (!s || s.solved || busyRef.current || level !== s.maxHintUsed + 1) return;
-      const m = msg("user", `🪜 I'd like hint ${level}, please.`, { hintLevel: level });
+      const m = msg("user", `I'd like hint ${level}, please.`, { hintLevel: level });
       const messages = [...s.messages, m];
       update((cur) => ({ ...cur, maxHintUsed: level, messages }));
       sessionRef.current = { ...s, maxHintUsed: level, messages };
@@ -342,15 +342,15 @@ export function DebugWorkspace() {
     listening: "Quack is listening…",
     thinking: busy ? busyLabel : running ? (runStatus ?? "Running your code…") : "Hmm…",
     curious: "Quack is curious",
-    celebrating: "Quack is celebrating! 🎉",
+    celebrating: "Bug found. Nice work.",
     sleepy: "Quack dozed off… say something!",
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-[minmax(0,1fr)] content-start gap-5 p-3 sm:p-4 lg:content-stretch lg:h-[calc(100dvh-3.5rem)] lg:min-h-0 lg:flex-none lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+    <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-[minmax(0,1fr)] content-start gap-4 p-3 sm:p-5 lg:content-stretch lg:h-[calc(100dvh-3.5rem)] lg:min-h-0 lg:flex-none lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <h1 className="sr-only">Debug with Quack</h1>
       {/* ---------------- mobile panel switcher ---------------- */}
-      <div role="tablist" aria-label="Workspace panel" className="neu-inset-sm grid grid-cols-2 gap-1 rounded-2xl p-1 lg:hidden">
+      <div role="tablist" aria-label="Workspace panel" className="well grid grid-cols-2 gap-1 rounded-lg p-1 lg:hidden">
         {(
           [
             ["code", "Code", Code2],
@@ -363,13 +363,13 @@ export function DebugWorkspace() {
             type="button"
             aria-selected={mobileTab === id}
             onClick={() => setMobileTab(id)}
-            className="relative flex h-10 items-center justify-center gap-2 rounded-xl text-sm font-medium focus-visible:outline-2 focus-visible:outline-ring"
+            className="relative flex h-9 items-center justify-center gap-2 rounded-md text-sm font-medium text-muted-foreground aria-selected:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
           >
-            {mobileTab === id && <motion.span layoutId="ws-tab" className="neu-sm absolute inset-0 rounded-xl" aria-hidden />}
+            {mobileTab === id && <motion.span layoutId="ws-tab" className="absolute inset-0 rounded-md bg-card shadow-[var(--elevation)]" aria-hidden />}
             <span className="relative z-10 flex items-center gap-2">
               <Icon className="size-4" aria-hidden /> {label}
               {id === "code" && highlightLines.length > 0 && (
-                <span className="size-2 rounded-full bg-amber-500" aria-label="(line highlighted)" />
+                <span className="size-1.5 rounded-full bg-[var(--brand)]" aria-label="(line highlighted)" />
               )}
               {id === "duck" && busy && <Loader2 className="size-3.5 animate-spin" aria-label="(Quack is thinking)" />}
             </span>
@@ -387,9 +387,9 @@ export function DebugWorkspace() {
             data-testid="sample-select"
             value={session.sampleId ?? ""}
             onChange={(e) => reset(e.target.value || undefined)}
-            className="neu-inset-sm h-10 min-w-0 flex-1 basis-full rounded-xl px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring sm:basis-0"
+            className="field h-9 min-w-0 flex-1 basis-full rounded-lg px-3 text-sm sm:basis-0"
           >
-            <option value="">✏️ My own code</option>
+            <option value="">My own code</option>
             {SAMPLES.map((s, i) => (
               <option key={s.id} value={s.id}>
                 Sample {i + 1}: {s.title}
@@ -408,18 +408,18 @@ export function DebugWorkspace() {
               else update((cur) => ({ ...cur, language }));
               if (language === "python") void prewarmPython().catch(() => {});
             }}
-            className="neu-inset-sm h-10 flex-1 rounded-xl px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring sm:flex-none"
+            className="field h-9 flex-1 rounded-lg px-3 text-sm sm:flex-none"
           >
             <option value="python">Python</option>
             <option value="javascript">JavaScript</option>
           </select>
-          <Button onClick={run} disabled={running} data-testid="run-button" className="h-10 flex-1 px-5 sm:flex-none">
+          <Button onClick={run} disabled={running} data-testid="run-button" className="h-9 flex-1 px-4 sm:flex-none">
             {running ? <Loader2 className="animate-spin" aria-hidden /> : <Play aria-hidden />}
             {running ? (runStatus ?? "Running…") : "Run"}
           </Button>
         </div>
 
-        <div className="neu-inset min-h-[50dvh] flex-1 overflow-hidden rounded-2xl p-1.5 lg:min-h-0">
+        <div className="surface-sm min-h-[50dvh] flex-1 overflow-hidden rounded-xl lg:min-h-0">
           <CodeEditor
             value={session.code}
             language={session.language}
@@ -430,7 +430,7 @@ export function DebugWorkspace() {
 
         <div className="grid gap-4 sm:grid-cols-[1fr_200px]">
           <div>
-            <label htmlFor="expected" className="mb-1 block text-sm font-medium">
+            <label htmlFor="expected" className="mb-1.5 block text-xs font-medium text-muted-foreground">
               What should this code do?
             </label>
             <textarea
@@ -440,11 +440,11 @@ export function DebugWorkspace() {
               value={session.expectedBehavior}
               onChange={(e) => update((cur) => ({ ...cur, expectedBehavior: e.target.value }))}
               placeholder="e.g. Print the average of the scores (75.0)"
-              className="neu-inset-sm w-full resize-none rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-ring"
+              className="field w-full resize-none rounded-lg px-3 py-2 text-sm"
             />
           </div>
           <div>
-            <label htmlFor="stdin" className="mb-1 block text-sm font-medium">
+            <label htmlFor="stdin" className="mb-1.5 block text-xs font-medium text-muted-foreground">
               Input (stdin)
             </label>
             <textarea
@@ -453,7 +453,7 @@ export function DebugWorkspace() {
               value={stdin}
               onChange={(e) => setStdin(e.target.value)}
               placeholder="One line per input() / prompt()"
-              className="neu-inset-sm w-full resize-none rounded-xl px-3 py-2 font-mono text-sm focus-visible:outline-2 focus-visible:outline-ring"
+              className="field w-full resize-none rounded-lg px-3 py-2 font-mono text-sm"
             />
           </div>
         </div>
@@ -461,16 +461,16 @@ export function DebugWorkspace() {
 
       {/* ---------------- right: duck + chat ---------------- */}
       <section aria-label="Quack the duck" className={cn("min-h-[calc(100dvh-9rem)] flex-col gap-4 lg:flex lg:min-h-0", mobileTab === "duck" ? "flex" : "hidden")}>
-        <div className="neu flex items-center gap-3 rounded-3xl p-3">
-          <div className="neu-inset-sm shrink-0 rounded-2xl p-1">
-            <Duck state={duckState} size={88} />
+        <div className="surface flex items-center gap-4 rounded-xl p-3">
+          <div className="well shrink-0 rounded-lg p-1">
+            <Duck state={duckState} size={72} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-semibold">Quack</p>
+            <p className="text-sm font-medium">Quack</p>
             <p className="truncate text-sm text-muted-foreground" aria-live="polite" data-testid="duck-caption">
               {duckCaption[duckState]}
             </p>
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
               <label className="flex items-center gap-2">
                 <Switch
                   checked={duckSpeaks}
@@ -487,14 +487,14 @@ export function DebugWorkspace() {
                 <button
                   type="button"
                   onClick={() => (duckLink.connected ? duckLink.disconnect() : duckLink.connect())}
-                  className="inline-flex items-center gap-1 rounded px-1 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+                  className="inline-flex items-center gap-1.5 rounded transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
                 >
                   <Usb className="size-3.5" aria-hidden />
-                  {duckLink.connected ? "Duck connected ✓" : "Connect duck 🦆"}
+                  {duckLink.connected ? "Duck connected" : "Connect duck"}
                 </button>
               )}
               {isMockMode && (
-                <span className="neu-inset-sm rounded-full px-2 py-0.5 text-muted-foreground" title="MOCK_AI mode: scripted replies, no API calls">
+                <span className="rounded-full border px-2 py-0.5" title="MOCK_AI mode: scripted replies, no API calls">
                   demo mode
                 </span>
               )}
@@ -504,7 +504,7 @@ export function DebugWorkspace() {
 
         <HintLadder level={session.maxHintUsed} disabled={busy || session.solved} onClimb={climb} />
 
-        <div className="neu flex min-h-[60dvh] flex-1 flex-col overflow-hidden rounded-3xl lg:min-h-0">
+        <div className="surface flex min-h-[60dvh] flex-1 flex-col overflow-hidden rounded-xl lg:min-h-0">
           <AnimatePresence initial={false}>
           {solvedInfo && (
             <motion.div
@@ -512,13 +512,17 @@ export function DebugWorkspace() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="m-3 mb-0 overflow-hidden rounded-2xl bg-green-50 p-3 text-sm text-green-950 shadow-[var(--neu-in-sm)] dark:bg-green-500/10 dark:text-green-100"
+              className="overflow-hidden border-b bg-emerald-50/60 px-4 py-3 text-sm dark:bg-emerald-500/5"
               role="status"
               data-testid="solved-banner"
             >
-              <p className="font-semibold">🎉 Bug squashed!{solvedInfo.category ? ` Category: ${categoryLabel(solvedInfo.category)}` : ""}</p>
-              {solvedInfo.lesson ? <p className="mt-1"><RichText text={solvedInfo.lesson} /></p> : <p className="mt-1 opacity-80">Writing it in your bug journal…</p>}
-              <div className="mt-3 flex flex-wrap gap-3">
+              <p className="flex items-center gap-2 font-medium">
+                <CircleCheck className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden />
+                Bug squashed
+                {solvedInfo.category && <span className="font-normal text-muted-foreground">· {categoryLabel(solvedInfo.category)}</span>}
+              </p>
+              {solvedInfo.lesson ? <p className="mt-1.5 text-muted-foreground"><RichText text={solvedInfo.lesson} /></p> : <p className="mt-1.5 text-muted-foreground">Writing it in your bug journal…</p>}
+              <div className="mt-3 flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={() => reset()}>
                   <RotateCcw aria-hidden /> New session
                 </Button>
@@ -544,7 +548,7 @@ export function DebugWorkspace() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 8 }}
-                className="mx-3 mb-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-900 dark:bg-red-500/10 dark:text-red-200"
+                className="mx-3 mb-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200"
               >
                 {error}{" "}
                 <button className="underline" onClick={() => setError(null)}>
@@ -554,10 +558,10 @@ export function DebugWorkspace() {
             )}
           </AnimatePresence>
           {!session.solved && (
-            <div className="flex items-center justify-between gap-2 px-4 pt-1 pb-3 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between gap-2 border-t px-4 py-2.5 text-xs text-muted-foreground">
               <span>Found it on your own?</span>
               <Button size="sm" variant="secondary" onClick={() => void markSolved()} data-testid="mark-solved">
-                ✅ Mark as solved
+                <Check aria-hidden /> Mark as solved
               </Button>
             </div>
           )}

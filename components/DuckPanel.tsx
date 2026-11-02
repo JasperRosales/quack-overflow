@@ -39,21 +39,21 @@ export function DuckPanel() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-6 p-4 sm:p-6">
+    <div className="mx-auto w-full max-w-5xl space-y-6 px-4 py-8 sm:px-6 sm:py-12">
       <div>
-        <h1 className="text-2xl font-bold">Hardware duck 🦆</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Hardware duck</h1>
         <p className="text-sm text-muted-foreground">
           Optional: an ESP32 rubber duck with LEDs and a speaker that mirrors Quack&apos;s mood. Plug it in over USB and connect. Everything
           works without it. See <code className="rounded bg-muted px-1">hardware/wiring.md</code> for parts and wiring.
         </p>
       </div>
 
-      <section aria-labelledby="conn-title" className="neu rounded-3xl p-4 sm:p-5">
-        <h2 id="conn-title" className="mb-3 font-semibold">
+      <section aria-labelledby="conn-title" className="surface rounded-xl p-4 sm:p-5">
+        <h2 id="conn-title" className="mb-3 text-sm font-medium">
           Connection
         </h2>
         {!link.supported ? (
-          <p role="status" className="neu-inset-sm rounded-2xl p-3 text-sm">
+          <p role="status" className="well rounded-lg p-3 text-sm text-muted-foreground">
             Web Serial isn&apos;t available in this browser. Use desktop <strong>Chrome</strong> or <strong>Edge</strong> to connect a hardware duck.
             The on-screen duck works everywhere.
           </p>
@@ -77,7 +77,7 @@ export function DuckPanel() {
                   setBusy(false);
                 }}
               >
-                <Usb aria-hidden /> Connect duck 🦆
+                <Usb aria-hidden /> Connect duck
               </Button>
             )}
           </div>
@@ -85,8 +85,8 @@ export function DuckPanel() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section aria-labelledby="test-title" className="neu rounded-3xl p-4 sm:p-5">
-          <h2 id="test-title" className="mb-3 font-semibold">
+        <section aria-labelledby="test-title" className="surface rounded-xl p-4 sm:p-5">
+          <h2 id="test-title" className="mb-3 text-sm font-medium">
             Test commands
           </h2>
           <ul className="grid gap-3 sm:grid-cols-2">
@@ -106,7 +106,7 @@ export function DuckPanel() {
             ))}
           </ul>
           <h3 className="mt-5 mb-2 text-sm font-semibold">Serial log</h3>
-          <ol className="h-40 overflow-y-auto rounded-2xl bg-zinc-950 p-2 font-mono text-xs text-zinc-100" aria-label="Serial log" aria-live="polite">
+          <ol className="h-40 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950 p-2 font-mono text-xs text-zinc-100" aria-label="Serial log" aria-live="polite">
             {log.length === 0 && <li className="text-zinc-400">Nothing yet. Press the duck&apos;s button to see BTN_HINT.</li>}
             {log.map((l, i) => (
               <li key={i}>
@@ -116,9 +116,9 @@ export function DuckPanel() {
           </ol>
         </section>
 
-        <section aria-labelledby="preview-title" className="neu rounded-3xl p-4 sm:p-5">
+        <section aria-labelledby="preview-title" className="surface rounded-xl p-4 sm:p-5">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <h2 id="preview-title" className="font-semibold">
+            <h2 id="preview-title" className="text-sm font-medium">
               On-screen duck states
             </h2>
             <label className="flex items-center gap-2 text-xs">

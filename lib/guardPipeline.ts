@@ -66,7 +66,7 @@ export async function guardedReply(ctx: GuardContext, deps: PipelineDeps): Promi
     }
 
     const fallback: DuckReply = draft.solved_signal
-      ? { reply: "QUAAACK!! 🎉 You found it! Go ahead and make the change yourself, you've earned it.", solved_signal: true, duck_mood: "celebrating" }
+      ? { reply: "QUAAACK!! You found it! Go ahead and make the change yourself, you've earned it.", solved_signal: true, duck_mood: "celebrating" }
       : {
           reply: pickFallback(Date.now()),
           // Line numbers are never a leak; keep them so the hint ladder still works.

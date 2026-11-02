@@ -1,6 +1,6 @@
 {
   "sampleId": "py-average",
-  "opening": "Quack! 🦆 Before we dive in: in your own words, what should this program print, and what does it actually print?",
+  "opening": "Quack! Before we dive in: in your own words, what should this program print, and what does it actually print?",
   "onRun": [
     "Interesting! You expected 75.0 but got 52.5. Is 52.5 bigger or smaller than you expected, and what could make an average come out too small?",
     "Same output again. If the average is too small, is `total` too small, or is `len(nums)` too big?"
@@ -13,12 +13,12 @@
     "Quack… what does `range(1, len(nums))` produce for a list with 4 items? Try listing the numbers out loud."
   ],
   "hints": {
-    "1": { "reply": "🪜 Hint 1: Take a close look at where your loop *starts*. Which items does it touch?", "duck_mood": "curious" },
-    "2": { "reply": "🪜 Hint 2: This smells like an off-by-one error. Python lists start counting at a certain number. Which one?", "duck_mood": "curious" },
-    "3": { "reply": "🪜 Hint 3: I've highlighted the line to stare at. What is the first number this line hands to `i`?", "highlight_lines": [3], "duck_mood": "curious" },
-    "4": { "reply": "🪜 Hint 4: On line 3, `range(1, len(nums))` starts counting at 1, but the first score lives at index 0. So the loop never adds `nums[0]`, the 90. How would you make the loop include it?", "highlight_lines": [3], "duck_mood": "curious" }
+    "1": { "reply": "Hint 1: Take a close look at where your loop *starts*. Which items does it touch?", "duck_mood": "curious" },
+    "2": { "reply": "Hint 2: This smells like an off-by-one error. Python lists start counting at a certain number. Which one?", "duck_mood": "curious" },
+    "3": { "reply": "Hint 3: I've highlighted the line to stare at. What is the first number this line hands to `i`?", "highlight_lines": [3], "duck_mood": "curious" },
+    "4": { "reply": "Hint 4: On line 3, `range(1, len(nums))` starts counting at 1, but the first score lives at index 0. So the loop never adds `nums[0]`, the 90. How would you make the loop include it?", "highlight_lines": [3], "duck_mood": "curious" }
   },
   "solvedPatterns": ["skip", "miss", "never (adds|add|touches|visits)", "first (element|item|score|number|one|value)", "index 0", "nums\\[0\\]", "\\bzero\\b", "starts? (at|from) (1|one)", "\\b90\\b.*(not|never|missing|left out|skipped)", "(not|never).*\\b90\\b"],
-  "solvedReply": "QUAAACK!! 🎉 You found it! The loop starts at 1, so the first score never gets added. You traced that all by yourself!",
-  "begReply": "Nice try 😄 but I'm a duck of principle. I won't hand you the fix, but you can climb the hint ladder. For now: what's the very first value `i` takes?"
+  "solvedReply": "QUAAACK!! You found it! The loop starts at 1, so the first score never gets added. You traced that all by yourself!",
+  "begReply": "Nice try but I'm a duck of principle. I won't hand you the fix, but you can climb the hint ladder. For now: what's the very first value `i` takes?"
 }

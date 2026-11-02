@@ -27,11 +27,11 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="neu-press inline-flex size-9 items-center justify-center rounded-xl focus-visible:outline-2 focus-visible:outline-ring"
+      className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Light mode" : "Dark mode"}
     >
-      {dark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
+      {dark ? <Sun className="size-[18px]" aria-hidden /> : <Moon className="size-[18px]" aria-hidden />}
     </button>
   );
 }

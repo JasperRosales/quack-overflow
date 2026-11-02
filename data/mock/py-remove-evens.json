@@ -4,12 +4,12 @@
   "onRun": ["The 4 survived! Which number came right after 2 in the list, and was it ever checked?"],
   "questions": ["What happens to the positions of the other items when you remove one from a list?", "If the loop is on position 0 and you remove that item, what item is now at position 1?"],
   "hints": {
-    "1": { "reply": "🪜 Hint 1: Watch what the list looks like *while* the loop is running.", "duck_mood": "curious" },
-    "2": { "reply": "🪜 Hint 2: This is a mutation problem: changing a list while looping over it.", "duck_mood": "curious" },
-    "3": { "reply": "🪜 Hint 3: The highlighted lines loop over a list and change that same list.", "highlight_lines": [2, 4], "duck_mood": "curious" },
-    "4": { "reply": "🪜 Hint 4: When line 4 removes an item, everything after it shifts left by one, so the loop jumps over the next item. How could you avoid changing the list you're looping over?", "highlight_lines": [2, 4], "duck_mood": "curious" }
+    "1": { "reply": "Hint 1: Watch what the list looks like *while* the loop is running.", "duck_mood": "curious" },
+    "2": { "reply": "Hint 2: This is a mutation problem: changing a list while looping over it.", "duck_mood": "curious" },
+    "3": { "reply": "Hint 3: The highlighted lines loop over a list and change that same list.", "highlight_lines": [2, 4], "duck_mood": "curious" },
+    "4": { "reply": "Hint 4: When line 4 removes an item, everything after it shifts left by one, so the loop jumps over the next item. How could you avoid changing the list you're looping over?", "highlight_lines": [2, 4], "duck_mood": "curious" }
   },
   "solvedPatterns": ["shift", "skip", "(modif|chang|mutat|remov).*(while|during).*(loop|iterat)", "same list"],
-  "solvedReply": "QUACK! 🎉 Yes! Removing items shifts everything over, so the loop skips some. Nicely spotted!",
-  "begReply": "My beak is sealed 🤐. Climb the hint ladder if you're stuck! What happens to the list when you remove an item?"
+  "solvedReply": "QUACK! Yes! Removing items shifts everything over, so the loop skips some. Nicely spotted!",
+  "begReply": "My beak is sealed. Climb the hint ladder if you're stuck! What happens to the list when you remove an item?"
 }

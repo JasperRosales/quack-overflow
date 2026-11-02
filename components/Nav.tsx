@@ -8,6 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { useDuckLink } from "./DuckLink";
+import { LogoMark } from "./Logo";
 
 const LINKS = [
   { href: "/debug", label: "Debug" },
@@ -31,34 +32,29 @@ export function Nav() {
   );
 
   return (
-    <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
       <nav aria-label="Main" className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4">
-        <Link href="/" className="mr-2 flex items-center gap-2 font-heading text-lg font-bold sm:mr-4">
-          <motion.span
-            aria-hidden
-            className="neu-sm flex size-9 items-center justify-center rounded-xl text-xl"
-            whileHover={{ rotate: -12, scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
-          >
-            🦆
+        <Link href="/" className="mr-2 flex items-center gap-2.5 text-[15px] font-semibold tracking-tight sm:mr-6">
+          <motion.span whileHover={{ rotate: -8 }} className="flex">
+            <LogoMark />
           </motion.span>
           <span>Quack Overflow</span>
         </Link>
 
         {/* desktop links */}
-        <ul className="neu-inset-sm hidden items-center gap-1 rounded-2xl p-1 sm:flex">
+        <ul className="hidden items-center gap-1 sm:flex">
           {LINKS.map((l) => {
             const active = pathname?.startsWith(l.href);
             return (
               <li key={l.href} className="relative">
                 {active && (
-                  <motion.span layoutId="nav-pill" className="neu-sm absolute inset-0 rounded-xl" aria-hidden />
+                  <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-md bg-muted" aria-hidden />
                 )}
                 <Link
                   href={l.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "relative z-10 block rounded-xl px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
+                    "relative z-10 block rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground",
                     active && "text-foreground"
                   )}
                 >
@@ -74,7 +70,7 @@ export function Nav() {
           <ThemeToggle />
           <button
             type="button"
-            className="neu-press inline-flex size-9 items-center justify-center rounded-xl sm:hidden focus-visible:outline-2 focus-visible:outline-ring"
+            className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground sm:hidden focus-visible:outline-2 focus-visible:outline-ring"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -88,7 +84,7 @@ export function Nav() {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+                {open ? <X className="size-[18px]" aria-hidden /> : <Menu className="size-[18px]" aria-hidden />}
               </motion.span>
             </AnimatePresence>
           </button>
@@ -107,7 +103,7 @@ export function Nav() {
             transition={{ type: "spring", stiffness: 400, damping: 36 }}
           >
             <motion.ul
-              className="flex flex-col gap-3 px-4 pt-1 pb-5"
+              className="flex flex-col border-t px-2 py-2"
               initial="hidden"
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
@@ -119,7 +115,7 @@ export function Nav() {
                     <Link
                       href={l.href}
                       aria-current={active ? "page" : undefined}
-                      className="neu-press flex items-center rounded-2xl px-4 py-3 font-medium"
+                      className="flex items-center rounded-md px-3 py-3 text-sm font-medium text-muted-foreground aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
                     >
                       {l.label}
                       {l.href === "/duck" && dot}

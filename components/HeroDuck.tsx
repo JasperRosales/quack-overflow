@@ -9,7 +9,7 @@ const CYCLE: { state: DuckState; bubble: string }[] = [
   { state: "curious", bubble: "What value does i have on the last loop?" },
   { state: "thinking", bubble: "Hmm… and what did you expect it to be?" },
   { state: "curious", bubble: "Which line decides when the loop stops?" },
-  { state: "celebrating", bubble: "QUACK! You found it yourself! 🎉" },
+  { state: "celebrating", bubble: "You found it yourself. Nice work." },
 ];
 
 /** Landing-page duck that acts out a tiny debugging conversation. */
@@ -24,7 +24,7 @@ export function HeroDuck() {
   const c = CYCLE[i];
   return (
     <div className="flex flex-col items-center">
-      <div className="neu-inset-sm relative mb-3 flex min-h-[3.75rem] w-full max-w-xs items-center justify-center rounded-2xl px-4 py-2 text-center text-sm text-amber-950 dark:text-amber-50">
+      <div className="well relative mb-4 flex min-h-[3.5rem] w-full max-w-xs items-center justify-center rounded-lg px-4 py-2 text-center text-sm">
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={i}

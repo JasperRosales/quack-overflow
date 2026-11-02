@@ -66,7 +66,7 @@ export function speakable(text: string): string {
   return text
     .replace(/```[\s\S]*?```/g, " (code) ")
     .replace(/`([^`]+)`/g, "$1")
-    .replace(/🪜\s*Hint (\d):/g, "Hint $1.")
+    .replace(/(?:🪜\s*)?Hint (\d):/g, "Hint $1.")
     .replace(/\p{Extended_Pictographic}/gu, "")
     .replace(/\s+/g, " ")
     .trim();

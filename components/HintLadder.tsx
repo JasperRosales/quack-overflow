@@ -27,46 +27,49 @@ export function HintLadder({ level, disabled, onClimb }: HintLadderProps) {
   const next = (level + 1) as HintLevel;
 
   return (
-    <section aria-labelledby="hint-ladder-title" className="neu rounded-3xl p-3 sm:p-4">
+    <section aria-labelledby="hint-ladder-title" className="surface rounded-xl p-3 sm:p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 id="hint-ladder-title" className="text-sm font-semibold">
-          🪜 Hint ladder
+        <h2 id="hint-ladder-title" className="text-sm font-medium">
+          Hint ladder
         </h2>
         <span className="text-xs text-muted-foreground" aria-live="polite">
-          {level === 0 ? "No hints used, nice!" : `Level ${level} of 4`}
+          {level === 0 ? "No hints used" : `Level ${level} of 4`}
         </span>
       </div>
-      <ol className="grid grid-cols-4 gap-2 sm:gap-3">
+      <ol className="grid grid-cols-4 gap-2">
         {STEPS.map((s) => {
           const used = s.level <= level;
           const isNext = s.level === next;
+          const active = isNext && !disabled;
           return (
             <li key={s.level}>
               <motion.button
-                whileTap={disabled || !isNext ? undefined : { scale: 0.94 }}
+                whileTap={active ? { scale: 0.97 } : undefined}
                 type="button"
                 data-testid={`hint-${s.level}`}
                 disabled={disabled || !isNext}
                 onClick={() => setPending(s.level)}
                 title={s.desc}
                 className={cn(
-                  "relative flex min-h-14 w-full flex-col items-center justify-center rounded-2xl px-1 py-2 text-xs font-medium transition-shadow",
+                  "group flex w-full flex-col gap-2 rounded-lg px-1 pt-1 pb-1.5 text-left text-xs transition-colors",
                   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  used && "neu-inset-sm text-amber-800 dark:text-amber-200",
-                  isNext && !disabled && "neu-sm ring-1 ring-amber-400/60",
-                  !used && (!isNext || disabled) && "neu-sm opacity-50"
+                  active && "hover:bg-muted",
+                  !used && !active && "opacity-45"
                 )}
               >
-                {isNext && !disabled && (
+                {/* progress segment */}
+                <span className="relative block h-1 overflow-hidden rounded-full bg-border">
                   <motion.span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-amber-400"
-                    animate={{ opacity: [0.15, 0.7, 0.15] }}
-                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-y-0 left-0 rounded-full bg-[var(--brand)]"
+                    initial={false}
+                    animate={{ width: used ? "100%" : "0%" }}
+                    transition={{ type: "spring", stiffness: 200, damping: 30 }}
                   />
-                )}
-                <span className="text-base leading-none">{s.level}</span>
-                <span>{s.label}</span>
+                </span>
+                <span className="flex items-baseline gap-1.5 px-0.5">
+                  <span className="font-mono text-[11px] text-muted-foreground">{s.level}</span>
+                  <span className={cn("font-medium", active && "text-foreground", used && "text-foreground")}>{s.label}</span>
+                </span>
                 <span className="sr-only">
                   {" "}hint: {s.desc}
                   {used ? " (used)" : ""}

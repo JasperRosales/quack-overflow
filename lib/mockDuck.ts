@@ -34,7 +34,7 @@ export const MOCK_SCRIPTS: Record<string, MockScript> = Object.fromEntries(
 
 const GENERIC: MockScript = {
   sampleId: "generic",
-  opening: "Quack! 🦆 I'm all ears (well, feathers). What is this code supposed to do, and what is it doing instead?",
+  opening: "Quack! I'm all ears (well, feathers). What is this code supposed to do, and what is it doing instead?",
   onRun: [
     "Look at that output! Which part of it surprised you the most?",
     "Read the output (or error) line by line. What is it trying to tell you, in your own words?",
@@ -48,14 +48,14 @@ const GENERIC: MockScript = {
     "If you could print one value right before things go wrong, which value would you pick, and why?",
   ],
   hints: {
-    "1": { reply: "🪜 Hint 1: Focus on the part of the code that produces the wrong result. Trace it slowly.", duck_mood: "curious" },
-    "2": { reply: "🪜 Hint 2: Common culprits: loop boundaries, types (text vs numbers), and comparisons. Which could apply here?", duck_mood: "curious" },
-    "3": { reply: "🪜 Hint 3: I'm only a mock duck right now, so I can't pinpoint lines without the AI. Which line would *you* highlight?", duck_mood: "curious" },
-    "4": { reply: "🪜 Hint 4: Explain the suspicious line to me as if I'm a very small duck. Every word. Where does your explanation wobble?", duck_mood: "curious" },
+    "1": { reply: "Hint 1: Focus on the part of the code that produces the wrong result. Trace it slowly.", duck_mood: "curious" },
+    "2": { reply: "Hint 2: Common culprits: loop boundaries, types (text vs numbers), and comparisons. Which could apply here?", duck_mood: "curious" },
+    "3": { reply: "Hint 3: I'm only a mock duck right now, so I can't pinpoint lines without the AI. Which line would *you* highlight?", duck_mood: "curious" },
+    "4": { reply: "Hint 4: Explain the suspicious line to me as if I'm a very small duck. Every word. Where does your explanation wobble?", duck_mood: "curious" },
   },
   solvedPatterns: [],
-  solvedReply: "QUAAACK!! 🎉 You found it! Nicely done, detective.",
-  begReply: "I'm a duck of principle 🦆, so no answers, only questions! If you're stuck, climb the hint ladder.",
+  solvedReply: "QUAAACK!! You found it! Nicely done, detective.",
+  begReply: "I'm a duck of principle, so no answers, only questions! If you're stuck, climb the hint ladder.",
 };
 
 const GENERIC_SOLVED = /\b(found (it|the bug)|i (see|get) it( now)?|that'?s the (bug|problem|issue)|figured it out|oh+[,!.]* (i see|wait|now i see)|aha+|i fixed it|it works now)\b/i;
