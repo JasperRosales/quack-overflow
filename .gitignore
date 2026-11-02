@@ -44,3 +44,6 @@ next-env.d.ts
 # test artifacts
 /test-results/
 /playwright-report/
+
+# red-team run outputs (regenerate with npm run redteam)
+/deliverables/redteam-*.json

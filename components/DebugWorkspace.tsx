@@ -341,7 +341,7 @@ export function DebugWorkspace() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl flex-1 gap-4 p-4 lg:h-[calc(100dvh-3.5rem)] lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+    <div className="mx-auto grid w-full max-w-7xl flex-1 gap-4 p-4 lg:h-[calc(100dvh-3.5rem)] lg:min-h-0 lg:flex-none lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <h1 className="sr-only">Debug with Quack</h1>
       {/* ---------------- left: code ---------------- */}
       <section aria-label="Your code" className="flex min-h-0 flex-col gap-3">

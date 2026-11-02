@@ -39,7 +39,7 @@ export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disable
     <div className="flex min-h-0 flex-1 flex-col">
       <ol
         ref={listRef}
-        className="flex min-h-[200px] flex-1 flex-col gap-3 overflow-y-auto p-3"
+        className="relative flex min-h-[200px] flex-1 flex-col gap-3 overflow-y-auto p-3"
         aria-label="Conversation with Quack"
         aria-live="polite"
         aria-relevant="additions"
