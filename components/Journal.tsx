@@ -9,7 +9,7 @@ import { storage } from "@/lib/storage";
 import type { DebugSession } from "@/lib/types";
 import { buildDemoJournal, computeStats } from "@/lib/journalStats";
 import { RichText } from "./RichText";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { Duck } from "./Duck";
 
 // Single-series bar colour, validated (light + dark surfaces) with the dataviz palette validator.
@@ -69,9 +69,9 @@ export function Journal() {
           Every bug you squash with Quack lands here, with its category and the lesson you learned. Patterns show up after a few bugs.
         </p>
         <div className="flex flex-wrap justify-center gap-2">
-          <Button render={<Link href="/debug?sample=js-off-by-one" />} nativeButton={false}>
+          <Link href="/debug?sample=js-off-by-one" className={buttonVariants()}>
             Try a sample bug
-          </Button>
+          </Link>
           <Button variant="outline" onClick={() => storage.setSessions(buildDemoJournal(now))} data-testid="load-demo-journal">
             Load demo journal
           </Button>

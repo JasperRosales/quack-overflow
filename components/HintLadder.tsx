@@ -47,7 +47,6 @@ export function HintLadder({ level, disabled, onClimb }: HintLadderProps) {
                 disabled={disabled || !isNext}
                 onClick={() => setPending(s.level)}
                 title={s.desc}
-                aria-label={`Hint level ${s.level}: ${s.label}. ${s.desc}${used ? " (used)" : ""}`}
                 className={cn(
                   "flex w-full flex-col items-center rounded-lg border px-1 py-1.5 text-xs font-medium transition-colors",
                   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
@@ -58,6 +57,10 @@ export function HintLadder({ level, disabled, onClimb }: HintLadderProps) {
               >
                 <span className="text-base leading-none">{s.level}</span>
                 <span>{s.label}</span>
+                <span className="sr-only">
+                  {" "}hint: {s.desc}
+                  {used ? " (used)" : ""}
+                </span>
               </button>
             </li>
           );

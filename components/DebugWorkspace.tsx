@@ -19,7 +19,7 @@ import { CodeEditor } from "./CodeEditor";
 import { Duck } from "./Duck";
 import { useDuckLink } from "./DuckLink";
 import { HintLadder } from "./HintLadder";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { Switch } from "./ui/switch";
 import { RichText } from "./RichText";
 
@@ -478,9 +478,9 @@ export function DebugWorkspace() {
                 <Button size="sm" variant="outline" onClick={() => reset()}>
                   <RotateCcw aria-hidden /> New session
                 </Button>
-                <Button size="sm" variant="outline" render={<Link href="/journal" />} nativeButton={false}>
+                <Link href="/journal" className={buttonVariants({ variant: "outline", size: "sm" })}>
                   <BookOpen aria-hidden /> View journal
-                </Button>
+                </Link>
               </div>
             </div>
           )}
