@@ -16,6 +16,8 @@ export const CONFIG = {
   guardEditDistanceRatio: 0.34,
   /** Leak guard: ignore code lines with fewer tokens than this for the near-copy check. */
   guardMinLineTokens: 4,
+  /** Leak guard: a near-copy must align at least this many tokens with a real code line. */
+  guardMinAlignedTokens: 5,
   /** Max output tokens for duck replies (they are 1–3 sentences). */
   duckMaxTokens: 2000,
   guardMaxTokens: 1000,

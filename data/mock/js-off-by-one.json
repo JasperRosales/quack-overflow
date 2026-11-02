@@ -1,0 +1,24 @@
+{
+  "sampleId": "js-off-by-one",
+  "opening": "Quack! 🦆 Tell me what this code is supposed to do. What total do you expect to see?",
+  "onRun": [
+    "Ooh, look at the output! One of the lines says `Adding score: undefined`. Why do you think a score would be `undefined`?",
+    "There's that `undefined` again, and then `NaN`. What happens when you add `undefined` to a number?"
+  ],
+  "questions": [
+    "How many scores are in the `scores` array? And what index does the *last* score have?",
+    "What's the last index your loop visits? Try tracing `i` step by step: 0, 1, …",
+    "When `i` equals `scores.length`, what is `scores[i]`?",
+    "Compare the number of times the loop runs with the number of scores. Do they match?",
+    "Quack. Read the loop condition out loud. When exactly does it decide to stop?"
+  ],
+  "hints": {
+    "1": { "reply": "🪜 Hint 1: Look at how your loop *ends*. Is it stopping at the right moment?", "duck_mood": "curious" },
+    "2": { "reply": "🪜 Hint 2: This might be an off-by-one issue. Arrays in JavaScript start at index 0. So what's the biggest valid index?", "duck_mood": "curious" },
+    "3": { "reply": "🪜 Hint 3: I've highlighted the line. Look closely at the comparison in the loop condition. What's the last value of `i` it allows?", "highlight_lines": [3], "duck_mood": "curious" },
+    "4": { "reply": "🪜 Hint 4: On line 3, the condition `i <= scores.length` lets `i` reach 3, but the array only has indexes 0, 1 and 2. So `scores[3]` is `undefined`, and adding it turns the total into `NaN`. How could the condition stop one step earlier?", "highlight_lines": [3], "duck_mood": "curious" }
+  },
+  "solvedPatterns": ["stop(s|ped)? (one )?before", "less than (the )?length", "<\\s*(scores\\.)?length", "one too (many|far)", "past the end", "out of (bounds|range)", "goes? to (index )?3", "index 3", "scores\\[3\\]", "length\\s*-\\s*1", "should(n'?t| not) (be|use) (<=|less than or equal)", "<= is wrong", "the <= ", "equal(s)? to (the )?length"],
+  "solvedReply": "QUAAACK!! 🎉 Yes! The loop runs one step too far and reads a score that doesn't exist. You debugged that like a pro!",
+  "begReply": "Aww, I can tell you're frustrated 💛 but if I tell you, you'll lose the 'aha!' moment. Want to climb the hint ladder instead? Meanwhile: what's the last index your loop visits?"
+}

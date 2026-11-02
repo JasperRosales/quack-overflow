@@ -1,0 +1,15 @@
+{
+  "sampleId": "js-missing-await",
+  "opening": "Quack! What should `user` be when you print it?",
+  "onRun": ["The output says `Promise { <pending> }`. What is a Promise, and has it finished yet when you print it?"],
+  "questions": ["What does `fetchUser` return: a user, or something else?", "How long does `fetchUser` take before it has a user ready? Does `main` wait for that?"],
+  "hints": {
+    "1": { "reply": "🪜 Hint 1: Look at the line where `user` gets its value.", "duck_mood": "curious" },
+    "2": { "reply": "🪜 Hint 2: This is an async/await issue: a Promise that nobody waited for.", "duck_mood": "curious" },
+    "3": { "reply": "🪜 Hint 3: The highlighted line stores something that isn't ready yet.", "highlight_lines": [8], "duck_mood": "curious" },
+    "4": { "reply": "🪜 Hint 4: Line 8 stores the Promise itself, not the user it will eventually resolve to, because nothing tells `main` to wait. What keyword makes an async function wait for a Promise?", "highlight_lines": [8], "duck_mood": "curious" }
+  },
+  "solvedPatterns": ["await", "wait", "promise", "pending", "not (ready|finished|resolved)"],
+  "solvedReply": "QUACK! 🎉 Right: it's a Promise that hasn't resolved yet because nobody waited for it. Awesome!",
+  "begReply": "I'm a Socratic duck, not a vending machine 😄. Try the hint ladder! What does `fetchUser` actually return?"
+}
