@@ -18,6 +18,14 @@ const LABELS: Record<DuckState, string> = {
   sleepy: "Quack is sleepy",
 };
 
+/**
+ * framer-motion gives SVG transforms `transform-box: fill-box`, which measures a px origin from
+ * the element's own bounding box. Every origin below is written in the SVG's 200x200 viewBox
+ * coordinates, so pin the reference box to the viewBox; otherwise the eye and head pivot around
+ * points far off the duck and jump on every blink or head tilt.
+ */
+const VB = { transformBox: "view-box" } as const;
+
 const loop = (duration: number, extra: Partial<Transition> = {}): Transition => ({
   duration,
   repeat: Infinity,
@@ -64,7 +72,7 @@ export function Duck({ state, size = 200, className }: DuckProps) {
         {/* water ripple */}
         <ellipse cx="100" cy="182" rx="70" ry="8" className="fill-sky-300/40 dark:fill-sky-500/25" />
 
-        <motion.g style={{ originX: "100px", originY: "170px" }} {...body}>
+        <motion.g style={{ ...VB, originX: "100px", originY: "170px" }} {...body}>
           {/* body */}
           <path
             d="M30 128 C30 96 60 88 92 96 L138 100 C168 102 176 124 170 146 C164 168 134 176 100 176 C58 176 30 160 30 128 Z"
@@ -80,14 +88,14 @@ export function Duck({ state, size = 200, className }: DuckProps) {
             fill="#FFC107"
             stroke="#E8A800"
             strokeWidth="3"
-            style={{ originX: "76px", originY: "128px" }}
+            style={{ ...VB, originX: "76px", originY: "128px" }}
             animate={!reduce && state === "celebrating" ? { rotate: [0, -30, 0] } : { rotate: 0 }}
             transition={!reduce && state === "celebrating" ? loop(0.35) : { duration: 0.3 }}
           />
 
           {/* head group */}
           <motion.g
-            style={{ originX: "118px", originY: "96px" }}
+            style={{ ...VB, originX: "118px", originY: "96px" }}
             animate={{ rotate: headRotate[state] }}
             transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 10 }}
           >
@@ -98,7 +106,7 @@ export function Duck({ state, size = 200, className }: DuckProps) {
               fill="#FF8C1A"
               stroke="#D9650B"
               strokeWidth="2.5"
-              style={{ originX: "150px", originY: "72px" }}
+              style={{ ...VB, originX: "150px", originY: "72px" }}
               animate={!reduce && (state === "listening" || state === "celebrating") ? { scaleY: [1, 1.3, 1] } : { scaleY: 1 }}
               transition={!reduce ? loop(0.5) : { duration: 0 }}
             />
@@ -109,9 +117,13 @@ export function Duck({ state, size = 200, className }: DuckProps) {
               <path d="M124 58 Q131 64 138 58" stroke="#1f2937" strokeWidth="3" fill="none" strokeLinecap="round" />
             ) : (
               <motion.g
-                style={{ originX: "131px", originY: "56px" }}
-                animate={reduce ? { scale: eyeScale } : { scale: eyeScale, scaleY: [eyeScale, eyeScale, 0.1, eyeScale] }}
-                transition={reduce ? { duration: 0 } : loop(4, { times: [0, 0.9, 0.95, 1] })}
+                style={{ ...VB, originX: "131px", originY: "56px" }}
+                animate={
+                  reduce
+                    ? { scaleX: eyeScale, scaleY: eyeScale }
+                    : { scaleX: eyeScale, scaleY: [eyeScale, eyeScale, 0.1, eyeScale] }
+                }
+                transition={reduce ? { duration: 0 } : { scaleY: loop(4, { times: [0, 0.9, 0.95, 1] }), scaleX: { duration: 0.3 } }}
               >
                 <circle cx="131" cy="56" r="7" fill="#1f2937" />
                 <circle cx="133.5" cy="53.5" r="2.4" fill="#fff" />
@@ -187,7 +199,7 @@ export function Duck({ state, size = 200, className }: DuckProps) {
 
         {state === "celebrating" && (
           <motion.g
-            style={{ originX: "100px", originY: "100px" }}
+            style={{ ...VB, originX: "100px", originY: "100px" }}
             animate={reduce ? {} : { rotate: 360 }}
             transition={loop(3, { ease: "linear" })}
           >
