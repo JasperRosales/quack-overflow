@@ -43,10 +43,3 @@ test("landing page links into the app", async ({ page }) => {
   await page.getByRole("link", { name: "Try a sample bug" }).click();
   await expect(page).toHaveURL(/sample=js-off-by-one/);
 });
-
-test("duck page works without hardware", async ({ page }) => {
-  await page.goto("/duck");
-  await expect(page.getByRole("heading", { name: /Hardware duck/ })).toBeVisible();
-  await page.getByTestId("cycle-duck").click();
-  await expect(page.locator("[data-duck-state=listening]")).toBeVisible();
-});

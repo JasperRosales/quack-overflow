@@ -29,7 +29,6 @@ export const CONFIG = {
   /** Speech synthesis pitch/rate for the duck voice. */
   duckVoicePitch: 1.8,
   duckVoiceRate: 1.1,
-  serialBaudRate: 115200,
 } as const;
 
 export const MODELS = {

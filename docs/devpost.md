@@ -17,7 +17,6 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
 - **Leak guard.** Every reply is checked before you see it, so the answer can't slip out, not even when you beg, threaten to fail your class, or ask Quack to "pretend it's not a duck".
 - **Celebration + bug journal.** Find it and Quack throws a party (confetti and a happy duck). The session is classified (off-by-one, wrong type, async/await, …) with a one-line lesson, and the journal shows your patterns: *"You've had 3 off-by-one errors this week 👀"*.
 - **Voice mode.** Talk to the duck like a real rubber duck; it answers in a squeaky voice.
-- **Optional hardware duck.** An ESP32 inside a real rubber duck lights up and quacks along with Quack's mood over USB (Web Serial). Its button means "I'm stuck", which climbs the hint ladder.
 
 ## How we built it
 
@@ -27,7 +26,7 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
 - **Pyodide** in a module Web Worker and a JS Web Worker with console capture, Node-style value formatting (`Promise { <pending> }`), stdin, and a 5-second kill switch.
 - **Framer Motion** SVG duck with six moods (idle, listening, thinking, curious, celebrating, sleepy), all respecting reduced motion.
 - **Recharts** for the journal and localStorage for storage (no accounts).
-- **Web Speech API** for voice in and out, **Web Serial** for the hardware duck, **Arduino on ESP32** for the firmware (non-blocking LED animations plus a synthesized quack on a buzzer or I2S amp).
+- **Web Speech API** for voice in and out.
 - **Vitest + Playwright** for unit tests, an end-to-end smoke test, a red-team script and screenshot automation.
 - A full **MOCK_AI** mode with scripted conversations, so the demo can never be ruined by Wi-Fi.
 
@@ -40,7 +39,6 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
   The hard part was false positives: quoting `undefined`, `nums[0]` or a fragment of the user's own line must stay legal. We built 22 fixture replies (leaks and non-leaks) and tuned until all of them pass.
 - **Streaming vs. guarding.** You can't stream tokens to the user *and* guard the full reply. We stream *progress* instead ("Quack is thinking…", "Making sure I don't spoil the answer…", "Oops, almost gave it away! Rephrasing…") and only send the reply once it's verified.
 - **Pyodide in a worker.** Our bundler wraps module workers in a classic-worker bootstrap, and Pyodide refuses to load in classic workers. We serve the Python worker as a plain ES module instead. Infinite loops are handled by terminating the worker after 5 s, and Python 3.14 tracebacks are cleaned up to show only the learner's frames.
-- **Web Serial.** Keeping one serial connection alive across page navigation (a React context around a singleton), mapping six on-screen moods to LED and sound states, and making sure everything degrades gracefully when no duck is plugged in or the browser doesn't support Web Serial.
 
 ## Accomplishments that we're proud of
 
@@ -48,7 +46,7 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
 - A leak guard that catches "fixed" lines even when they aren't formatted as code.
 - Everything runs client-side except the AI calls: code execution, stats and storage.
 - Lighthouse accessibility **100** on every page, plus dark mode and reduced-motion support.
-- A rubber duck that quacks when you solve your bug. Need we say more?
+- A rubber duck that celebrates when you solve your bug. Need we say more?
 
 ## What we learned
 
@@ -66,4 +64,4 @@ Paste your Python or JavaScript, say what it *should* do, and talk to **Quack** 
 
 ## Built with
 
-`nextjs` `react` `typescript` `tailwindcss` `shadcn-ui` `gemini` `google-genai` `monaco-editor` `pyodide` `web-workers` `framer-motion` `recharts` `zod` `web-speech-api` `web-serial-api` `esp32` `arduino` `c++` `vitest` `playwright` `vercel`
+`nextjs` `react` `typescript` `tailwindcss` `shadcn-ui` `gemini` `google-genai` `monaco-editor` `pyodide` `web-workers` `framer-motion` `recharts` `zod` `web-speech-api` `vitest` `playwright` `vercel`

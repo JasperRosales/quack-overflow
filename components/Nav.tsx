@@ -7,18 +7,15 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
-import { useDuckLink } from "./DuckLink";
 import { LogoMark } from "./Logo";
 
 const LINKS = [
   { href: "/debug", label: "Debug" },
   { href: "/journal", label: "Journal" },
-  { href: "/duck", label: "Duck" },
 ];
 
 export function Nav() {
   const pathname = usePathname();
-  const { connected } = useDuckLink();
   const [open, setOpen] = useState(false);
   // Close the mobile menu whenever the route changes.
   const [lastPath, setLastPath] = useState(pathname);
@@ -26,10 +23,6 @@ export function Nav() {
     setLastPath(pathname);
     setOpen(false);
   }
-
-  const dot = connected && (
-    <span className="ml-1.5 inline-block size-2 rounded-full bg-green-500" aria-label="(hardware duck connected)" />
-  );
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
@@ -59,7 +52,6 @@ export function Nav() {
                   )}
                 >
                   {l.label}
-                  {l.href === "/duck" && dot}
                 </Link>
               </li>
             );
@@ -118,7 +110,6 @@ export function Nav() {
                       className="flex items-center rounded-md px-3 py-3 text-sm font-medium text-muted-foreground aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
                     >
                       {l.label}
-                      {l.href === "/duck" && dot}
                     </Link>
                   </motion.li>
                 );

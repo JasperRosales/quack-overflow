@@ -18,7 +18,7 @@ Beginners paste an error into an AI tool, copy the fix, and learn nothing. Next 
 
 ## The solution
 
-Quack Overflow is a web app with an animated duck, **Quack**, plus an optional physical duck. You paste your code and explain the bug by typing or talking. Quack **only asks Socratic questions** that guide you to the bug. It never writes the fix. When you find the bug yourself, Quack celebrates (and the hardware duck quacks and flashes rainbow).
+Quack Overflow is a web app with an animated duck, **Quack**. It runs entirely in software: no hardware needed. You paste your code and explain the bug by typing or talking. Quack **only asks Socratic questions** that guide you to the bug. It never writes the fix. When you find the bug yourself, Quack celebrates.
 
 ## Features
 
@@ -28,7 +28,6 @@ Quack Overflow is a web app with an animated duck, **Quack**, plus an optional p
 - **▶️ Run code in the browser:** Python (Pyodide) and JavaScript run in sandboxed Web Workers with a 5 s infinite-loop guard and stdin support. Output lands in the chat and Quack asks you to interpret it.
 - **📓 Bug journal:** each solved bug is classified (off-by-one, wrong type, …) with a one-line lesson. Stats, a category chart, and patterns like *"You've had 3 off-by-one errors this week 👀"*.
 - **🎙️ Voice mode:** talk to the duck (speech-to-text), and it talks back in a suitably high-pitched voice.
-- **🦆 Hardware duck (optional):** an ESP32 rubber duck with LEDs and a speaker, controlled from the browser over USB (Web Serial). Its button requests the next hint.
 - **🧪 Demo mode:** `MOCK_AI=true` runs the whole app with scripted conversations and no API key.
 - Dark mode, reduced-motion support, keyboard-friendly, Lighthouse accessibility **100**.
 
@@ -42,9 +41,7 @@ flowchart LR
   G1 --> G2["Leak guard 2:<br/>LLM judge (Gemini Flash-Lite)"]
   G2 -- "leak → regenerate once,<br/>then safe fallback" --> LLM
   G2 -- "safe reply" --> UI
-  UI --> STATE["Duck mood → Duck.tsx"]
-  STATE --> SERIAL["Web Serial"] --> HW["ESP32 duck<br/>LEDs + speaker"]
-  HW -- "BTN_HINT" --> UI
+  UI --> STATE["Duck mood → animated Duck.tsx"]
   UI -- "Run" --> W["Web Workers<br/>Pyodide · JS"] -- "output" --> UI
   UI -- "solved" --> C["/api/classify"] --> J["Bug journal<br/>(localStorage)"]
 ```
@@ -67,7 +64,7 @@ The duck API streams progress (`thinking → checking → rewriting`) as NDJSON,
 ### Prerequisites
 
 - Node.js **20+** (developed on Node 24) and npm
-- Chrome or Edge for voice and the hardware duck (everything else works in any modern browser)
+- Chrome or Edge for the best voice support (everything else works in any modern browser)
 - A [Gemini API key](https://aistudio.google.com/apikey) for real AI replies (optional: demo mode needs none)
 
 ### Run it
@@ -104,18 +101,9 @@ Set `MOCK_AI=true`, or leave `GEMINI_API_KEY` empty: the app falls back to mock 
 | `npm run screenshots -- --base http://localhost:3000` | Saves the 4 Devpost screenshots to `deliverables/screenshots/` (add `--dark` for dark mode) |
 | `npm run typecheck` / `lint` | TypeScript / ESLint |
 
-### Flash the hardware duck (optional)
-
-Full parts list, pin table and wiring diagram: **[hardware/wiring.md](hardware/wiring.md)**. In short:
-
-1. Arduino IDE 2 → *Boards Manager* → install **esp32 by Espressif (3.x)**; *Library Manager* → **Adafruit NeoPixel**.
-2. Open `hardware/duck_firmware/duck_firmware.ino`. Set `USE_I2S 1` if you use the MAX98357A amp (default `0` = passive buzzer).
-3. Select your board and port, then **Upload**. Close the Serial Monitor afterwards.
-4. In Chrome, open `/duck` → **Connect duck 🦆** → try the test buttons.
-
 ## Tech stack
 
-Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 · shadcn/ui (Base UI) · Monaco Editor · Framer Motion · Recharts · Google Gen AI SDK (Gemini 3.6 Flash + 3.5 Flash-Lite, structured JSON output) · zod · Pyodide · Web Workers · Web Speech API · Web Serial API · ESP32 / Arduino · Vitest · Playwright · Vercel (auto-deploys from `main`)
+Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 · shadcn/ui (Base UI) · Monaco Editor · Framer Motion · Recharts · Google Gen AI SDK (Gemini 3.6 Flash + 3.5 Flash-Lite, structured JSON output) · zod · Pyodide · Web Workers · Web Speech API · Vitest · Playwright · Vercel (auto-deploys from `main`)
 
 ## Testing status
 
@@ -127,13 +115,12 @@ Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 · shadcn/ui
 | Lighthouse (production build) | Accessibility 100 on all pages · Best practices 100 |
 | Red-team, mock mode | 0 / 15 leaks |
 | Red-team, live AI | _not yet run: needs an API key (`npm run redteam`)_ |
-| Hardware duck | Web Serial path tested with a simulated port; firmware not yet flashed to a real board |
 
 ## Limitations
 
 - Supports only Python and JavaScript for now.
 - Bug classification is AI-generated and may be imperfect.
-- Web Serial (hardware duck) and the best voice support only work in Chromium browsers (Chrome/Edge).
+- The best voice support is in Chromium browsers (Chrome/Edge).
 - The leak guard greatly reduces answer leaks but can't guarantee zero.
 - A Python program that times out restarts the Pyodide worker, so the next run warms up again (a few seconds).
 - The journal lives in your browser's localStorage (no accounts, no sync).

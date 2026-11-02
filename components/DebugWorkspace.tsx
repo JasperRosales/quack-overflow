@@ -2,14 +2,13 @@
 
 import confetti from "canvas-confetti";
 import { AnimatePresence, motion } from "framer-motion";
-import { BookOpen, Check, CircleCheck, Code2, Loader2, MessageCircle, Play, RotateCcw, Usb } from "lucide-react";
+import { BookOpen, Check, CircleCheck, Code2, Loader2, MessageCircle, Play, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { SAMPLES, getSample } from "@/data/samples";
 import { askDuck, classify } from "@/lib/duckClient";
-import { commandForState } from "@/lib/duckSerial";
 import { formatRunResult, prewarmPython, runCode } from "@/lib/runners";
 import { storage } from "@/lib/storage";
 import type { ChatMessage, DebugSession, DuckRequest, DuckState, DuckTrigger, HintLevel, Language } from "@/lib/types";
@@ -18,7 +17,6 @@ import { speak, stopSpeaking } from "@/lib/voice";
 import { ChatPanel } from "./ChatPanel";
 import { CodeEditor } from "./CodeEditor";
 import { Duck } from "./Duck";
-import { useDuckLink } from "./DuckLink";
 import { HintLadder } from "./HintLadder";
 import { Button, buttonVariants } from "./ui/button";
 import { Switch } from "./ui/switch";
@@ -65,7 +63,6 @@ const msg = (role: ChatMessage["role"], text: string, extra: Partial<ChatMessage
 export function DebugWorkspace() {
   const params = useSearchParams();
   const router = useRouter();
-  const duckLink = useDuckLink();
 
   const [session, setSession] = useState<DebugSession | null>(null);
   const [stdin, setStdin] = useState("");
@@ -143,7 +140,6 @@ export function DebugWorkspace() {
           questionsAsked: cur.questionsAsked + (r.reply.includes("?") ? 1 : 0),
         }));
         setMood(r.duck_mood);
-        if (r.duck_mood !== "celebrating") duckLink.send("QUACK", { force: true });
         if (storage.getSettings().duckSpeaks) speak(r.reply);
         if (r.solved_signal) void markSolvedRef.current();
       } catch (err) {
@@ -154,7 +150,7 @@ export function DebugWorkspace() {
         setBusy(false);
       }
     },
-    [update, duckLink]
+    [update]
   );
 
   // ------------------------------------------------------------------ solved
@@ -243,7 +239,6 @@ export function DebugWorkspace() {
     setMobileTab("duck");
     setError(null);
     setMood("thinking");
-    duckLink.send("THINK");
     try {
       const result = await runCode(s.language, s.code, stdin, setRunStatus);
       const text = formatRunResult(result);
@@ -314,20 +309,6 @@ export function DebugWorkspace() {
         : sleepy
           ? "sleepy"
           : mood;
-
-  useEffect(() => {
-    duckLink.send(commandForState(duckState));
-  }, [duckState, duckLink]);
-
-  // Hardware "I'm stuck" button climbs the ladder (the physical press is the confirmation).
-  useEffect(
-    () =>
-      duckLink.subscribe((m) => {
-        const s = sessionRef.current;
-        if (m === "BTN_HINT" && s && s.maxHintUsed < 4) climb((s.maxHintUsed + 1) as HintLevel);
-      }),
-    [duckLink, climb]
-  );
 
   if (!session) {
     return (
@@ -483,16 +464,6 @@ export function DebugWorkspace() {
                 />
                 Duck speaks
               </label>
-              {duckLink.supported && (
-                <button
-                  type="button"
-                  onClick={() => (duckLink.connected ? duckLink.disconnect() : duckLink.connect())}
-                  className="inline-flex items-center gap-1.5 rounded transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
-                >
-                  <Usb className="size-3.5" aria-hidden />
-                  {duckLink.connected ? "Duck connected" : "Connect duck"}
-                </button>
-              )}
               {isMockMode && (
                 <span className="rounded-full border px-2 py-0.5" title="MOCK_AI mode: scripted replies, no API calls">
                   demo mode

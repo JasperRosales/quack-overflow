@@ -18,7 +18,6 @@ const FEATURES = [
   ["Runs in your browser", "Python and JavaScript run in a sandbox, and infinite loops stop after five seconds."],
   ["Bug journal", "Each solved bug is saved with what you learned, so repeat mistakes start to stand out."],
   ["Voice", "Talk to the duck and it talks back. Works in Chrome and Edge."],
-  ["A real duck", "Optional: an ESP32 rubber duck that lights up and quacks over USB."],
 ];
 
 export function Landing() {

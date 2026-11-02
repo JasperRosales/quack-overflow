@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
-import { DuckLinkProvider } from "@/components/DuckLink";
 import { THEME_SCRIPT } from "@/components/ThemeToggle";
 import { MotionProvider } from "@/components/Motion";
 
@@ -38,12 +37,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <MotionProvider>
-          <DuckLinkProvider>
-            <Nav />
-            <main id="main" className="flex flex-1 flex-col">
-              {children}
-            </main>
-          </DuckLinkProvider>
+          <Nav />
+          <main id="main" className="flex flex-1 flex-col">
+            {children}
+          </main>
         </MotionProvider>
       </body>
     </html>
