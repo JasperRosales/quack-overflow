@@ -6,7 +6,7 @@ Built for **Next Byte Hacks V5**.
 
 ![Debugging with Quack: hint level 3 highlights the buggy line](deliverables/screenshots/3-hint-level-3.png)
 
-**Live demo:** _coming soon (Vercel link goes here after deploy)_
+**Live demo:** https://quack-overflow-bice.vercel.app (currently in demo mode: scripted duck replies until an API key is configured)
 
 ---
 
