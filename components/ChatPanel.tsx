@@ -6,6 +6,7 @@ import type { ChatMessage } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { RunOutput } from "./RunOutput";
 import { VoiceButton } from "./VoiceButton";
+import { RichText } from "./RichText";
 
 interface ChatPanelProps {
   messages: ChatMessage[];
@@ -14,24 +15,6 @@ interface ChatPanelProps {
   onSend: (text: string) => void;
   onTyping?: (typing: boolean) => void;
   disabled?: boolean;
-}
-
-/** Render `inline code` spans inside duck/user messages. */
-function RichText({ text }: { text: string }) {
-  const parts = text.split(/(`[^`\n]+`)/g);
-  return (
-    <>
-      {parts.map((p, i) =>
-        p.startsWith("`") && p.endsWith("`") && p.length > 2 ? (
-          <code key={i} className="rounded bg-black/10 px-1 py-0.5 font-mono text-[0.85em] dark:bg-white/15">
-            {p.slice(1, -1)}
-          </code>
-        ) : (
-          <span key={i}>{p}</span>
-        )
-      )}
-    </>
-  );
 }
 
 export function ChatPanel({ messages, busy, busyLabel, onSend, onTyping, disabled }: ChatPanelProps) {

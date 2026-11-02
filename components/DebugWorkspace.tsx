@@ -21,6 +21,7 @@ import { useDuckLink } from "./DuckLink";
 import { HintLadder } from "./HintLadder";
 import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
+import { RichText } from "./RichText";
 
 const STARTERS: Record<Language, string> = {
   python: "# Paste your Python code here\n",
@@ -340,7 +341,7 @@ export function DebugWorkspace() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl flex-1 gap-4 p-4 lg:h-[calc(100dvh-3.5rem)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+    <div className="mx-auto grid w-full max-w-7xl flex-1 gap-4 p-4 lg:h-[calc(100dvh-3.5rem)] lg:grid-rows-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <h1 className="sr-only">Debug with Quack</h1>
       {/* ---------------- left: code ---------------- */}
       <section aria-label="Your code" className="flex min-h-0 flex-col gap-3">
@@ -472,7 +473,7 @@ export function DebugWorkspace() {
           {solvedInfo && (
             <div className="border-b bg-green-50 p-3 text-sm text-green-950 dark:bg-green-500/10 dark:text-green-100" role="status" data-testid="solved-banner">
               <p className="font-semibold">🎉 Bug squashed!{solvedInfo.category ? ` Category: ${categoryLabel(solvedInfo.category)}` : ""}</p>
-              {solvedInfo.lesson ? <p className="mt-1">{solvedInfo.lesson}</p> : <p className="mt-1 opacity-80">Writing it in your bug journal…</p>}
+              {solvedInfo.lesson ? <p className="mt-1"><RichText text={solvedInfo.lesson} /></p> : <p className="mt-1 opacity-80">Writing it in your bug journal…</p>}
               <div className="mt-2 flex gap-2">
                 <Button size="sm" variant="outline" onClick={() => reset()}>
                   <RotateCcw aria-hidden /> New session
